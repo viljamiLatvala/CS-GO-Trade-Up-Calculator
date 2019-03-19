@@ -1,0 +1,115 @@
+commit 8f972c0e1fcd8f5c68f3821c60607c49036f2632
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:49:08 2019 +0200
+
+    Muutoksia tiedostoihin
+
+ tiedostoja/file1  | 0
+ tiedostoja/file2  | 0
+ tiedostoja/file22 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 9daab0515621763d214ae25928af8a5fca41e04b
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:42:52 2019 +0200
+
+    tiedostoja lisäilty
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit ee7e522b3ddfd1d283828ca26a8c4817b1a7d895
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:36:48 2019 +0200
+
+    muutoksia tekstitiedostoihin
+
+ eka.txt    | 2 +-
+ kolmas.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 7ce27cb6cfc8648a0988e54edbd026184a76451d
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:33:58 2019 +0200
+
+    tiedosto uudelleennimetty
+
+ eka.txt      | 1 +
+ tiedosto.txt | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+commit e46a87c0dab386cc0093493b8176376b6237fe43
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:31:50 2019 +0200
+
+    toinen.txt poistettu
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit e7cc249e21d122ecb99423f2a08fc38cbbb911ae
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:28:43 2019 +0200
+
+    Muokattu tiedosto.txt sisältöä
+
+ tiedosto.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 4537b67c7d3762228e9421ea83d3e4a940b67fb7
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:26:44 2019 +0200
+
+    kalevala ipsumia lisätty tiedostoon
+
+ tiedosto.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 8ef0a2eb6e611ca362a6a77a50d1560fdd7276f1
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:22:52 2019 +0200
+
+    Lisätty stuff-kansio ja sen sisältö
+
+ stuff/randomi.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 73480e536f41aa1ceac150997d5b4d0833f26b20
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:21:14 2019 +0200
+
+    Sisältöä lisätty tiedostoihin toinen ja kolmas
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit c989c3debd1144922fc98f9b4250b2e6e014b80a
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:19:17 2019 +0200
+
+    Kolmas tiedosto lisätty
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 283e9c731ee4025063e68a7a5f9d4d0f993667c3
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:16:48 2019 +0200
+
+    Muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit adf328f74d656cc304be170a800c928c079cbf18
+Author: Viljami Latvala <viljami.latvala@helsinki.fi>
+Date:   Tue Mar 19 13:14:18 2019 +0200
+
+    tiedosto.tt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
