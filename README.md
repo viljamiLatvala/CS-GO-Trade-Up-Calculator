@@ -4,6 +4,6 @@ Tämä repositorio sisältää Helsingin yliopiston kurssille Ohjelmistotekniikk
 
 ## Viikkolaskarit
 ### Viikko1
-[komentorivi.txt](../blob/master/laskarit/viikko1/komentorivi.txt)
+[komentorivi.txt](../master/laskarit/viikko1/komentorivi.txt)
 
-[gitlog.txt](../blob/master/laskarit/viikko1/gitlog.txt)
+[gitlog.txt](../master/laskarit/viikko1/gitlog.txt)
