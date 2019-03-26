@@ -13,5 +13,7 @@ Tämä repositorio sisältää Helsingin yliopiston kurssille Ohjelmistotekniikk
 
 ## Harjoitustyö
 [Vaatimusmäärittely](../master/dokumentaatio/vaatimusmaarittely.md)
+
 [Esitietoa](../master/dokumentaatio/esitietoa.md)
+
 [Tuntikirjanpito](../master/dokumentaatio/tuntikirjanpito.md)
