@@ -10,7 +10,7 @@ public class MaksukorttiTest {
 
     @Before
     public void setUp() {
-        kortti = new Maksukortti(10);
+        kortti = new Maksukortti(1000);
     }
 
     @Test
@@ -25,11 +25,11 @@ public class MaksukorttiTest {
     
     @Test 
     public void saldonLataaminenKasvattaaSaldoaOikein() {
-        kortti.lataaRahaa(10);
+        kortti.lataaRahaa(1000);
         assertEquals(2000, kortti.saldo());
-        kortti.lataaRahaa(5);
+        kortti.lataaRahaa(500);
         assertEquals(2500, kortti.saldo());
-        kortti.lataaRahaa(7);
+        kortti.lataaRahaa(700);
         assertEquals(3200, kortti.saldo());
     }
     

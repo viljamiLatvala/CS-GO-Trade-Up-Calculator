@@ -4,9 +4,9 @@ package com.mycompany.unicafe;
 public class Maksukortti {
  
     private int saldo;
- 
+
     public Maksukortti(int saldo) {
-        this.saldo = saldo*100;
+        this.saldo = saldo;
     }
  
     public int saldo() {
@@ -14,7 +14,7 @@ public class Maksukortti {
     }
  
     public void lataaRahaa(int lisays) {
-        this.saldo += lisays*100;
+        this.saldo += lisays;
     }
  
     public boolean otaRahaa(int maara) {
