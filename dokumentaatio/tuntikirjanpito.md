@@ -4,3 +4,4 @@
 |-------|---------------|-----------|
 | 26.3. | 1h | Tehtävänantoon tutustuminen, määrittelydokumentin kirjoittaminen |
 | 27.3. | 1h | Maven-projektin luominen, Item-luokan hahmottelua |
+| 2.4. | 4,5h | ItemDao-rajapinnan määrittely, sen toteuttavan FileItemDao:n luonti, perussovelluslogiikan rakentaminen, väliaikaisen tekstikäyttöliittymän luominen, testien kirjoittaminen |
