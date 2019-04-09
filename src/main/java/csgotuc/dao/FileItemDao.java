@@ -77,5 +77,16 @@ public class FileItemDao implements ItemDao {
     public Item findById(int id) {
         return this.items.get(id);
     }
+
+    @Override
+    public List<Item> getByGrade(int grade) {
+        List<Item> matches = new ArrayList<>();
+        for (Item item : this.items) {
+            if (item.getGrade() == grade) {
+                matches.add(item);
+            }
+        }
+        return matches;
+    }
     
 }

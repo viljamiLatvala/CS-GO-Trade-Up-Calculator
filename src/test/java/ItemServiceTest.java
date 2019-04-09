@@ -79,7 +79,7 @@ public class ItemServiceTest {
     
     @Test
     public void addToInputWorks() {
-        Item item = new Item("Item","Testipakkaus",10);
+        Item item = new Item("Item","Testipakkaus",1);
         this.itemService.addToInput(item);
         assertTrue(this.itemService.getInput().contains(item));
     }
@@ -88,7 +88,7 @@ public class ItemServiceTest {
     public void setInputWorks() {
         List<Item> items = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            items.add(new Item(Integer.toString(i), Integer.toString(i), i));
+            items.add(new Item(Integer.toString(i), Integer.toString(i), 1));
         }
         this.itemService.setInput(items);
         for (int i = 0; i < 10; i++) {

@@ -32,11 +32,23 @@ public class ItemService {
     }
     
     public void addToInput(Item item) {
-        this.input.add(item);
+        if (this.input.size() >= 10) {
+            throw new IllegalArgumentException("Maximum input size is 10!");
+        } else if (this.input.size() > 0 && this.input.get(0).getGrade() != item.getGrade()) {
+            throw new IllegalArgumentException("All items must be of same grade!");
+        } else if (item.getGrade() > 4) {
+            throw new IllegalArgumentException("Item grade must be below 6");
+        } else {
+            this.input.add(item);
+        }
     }
     
     public List<Item> getAll() {
         return this.itemDao.getAll();
+    }
+    
+    public List<Item> getByGrade(int grade) {
+        return this.itemDao.getByGrade(grade);
     }
     
     public void setInputWithIds(int[] ids) {

@@ -16,5 +16,6 @@ public interface ItemDao {
     List<Item> getAll();
     List<Item> getChildren(Item inputItem);
     Item findById(int id);
+    List<Item> getByGrade(int grade);
     
 }

@@ -63,7 +63,7 @@ public class Gui extends Application {
         tilePane.setHgap(4);
         tilePane.setPrefColumns(4);
         for (int i = 0; i < 10; i++) {
-            tilePane.getChildren().add(new Rectangle(100,100));
+            tilePane.getChildren().add(new Rectangle(100, 100));
         }
 
         //Output-esittely
@@ -83,16 +83,15 @@ public class Gui extends Application {
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     String clicked = list.getSelectionModel().getSelectedItem();
-                    if (itemService.getInput().size() < 10) {
-                        System.out.println("added to input: " + clicked);
+                    try {
                         itemService.addToInput(map.get(clicked));
-                        formInputLoadout(tilePane);
-                        formChart();
-                        pieChart.setData(pieChartData);
-                    } else {
-                        System.out.println("Input is full!");
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
                     }
-                    
+                    formInputLoadout(tilePane);
+                    formInputOptionList(list, map.get(clicked).getGrade());
+                    formChart();
+                    pieChart.setData(pieChartData);
                 }
             }
         });
@@ -126,13 +125,21 @@ public class Gui extends Application {
         for (Item item : outcomeDist.keySet()) {
             pieChartData.add(new PieChart.Data(item.getName(), outcomeDist.get(item)));
         }
-        
+
     }
-    
+
     public void formInputLoadout(TilePane tilePane) {
         for (int i = 0; i < this.itemService.getInput().size(); i++) {
-            tilePane.getChildren().set(i, new Rectangle(100,100,Color.GREEN));
+            tilePane.getChildren().set(i, new Rectangle(100, 100, Color.GREEN));
         }
+    }
+    
+    public void formInputOptionList(ListView list, int grade) {
+        ObservableMap<String, Item> map = FXCollections.observableHashMap();
+        for (Item item : itemService.getByGrade(grade)) {
+            map.put(item.getName(), item);
+        }
+        list.getItems().setAll(map.keySet());
     }
 
     @Override
