@@ -9,7 +9,10 @@ Tällä hetkellä sovellus lukee käyttöönsä esineet /src/main/resources sija
 
 [Esitietoa](../master/dokumentaatio/esitietoa.md)
 
+[Arkkitehtuurikuvaus](../master/dokumentaatio/arkkitehtuuri.md)
+
 [Tuntikirjanpito](../master/dokumentaatio/tuntikirjanpito.md)
+
 
 ## Komentorivitoiminnot
 
