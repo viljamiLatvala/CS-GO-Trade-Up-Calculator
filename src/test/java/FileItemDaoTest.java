@@ -46,7 +46,7 @@ public class FileItemDaoTest {
     @Test
     public void getAllReturnsAllItems() {
         List<Item> list = fileItemDao.getAll();
-        assertEquals(10, list.size());
+        assertEquals(13, list.size());
     }
     
     @Test 
@@ -62,6 +62,16 @@ public class FileItemDaoTest {
         assertTrue(children.contains(new Item("MP9 | Bulldozer", "Kokoelma2",1)));
         assertTrue(children.contains(new Item("SG 553 | Tornado", "Kokoelma2",1)));
         assertEquals(2, children.size());
+    }
+    
+    @Test
+    public void itemGradeIsSetCorrectly() {
+        assertTrue(fileItemDao.findById(0).getGrade() == 0);
+        assertTrue(fileItemDao.findById(1).getGrade() == 1);
+        assertTrue(fileItemDao.findById(9).getGrade() == 2);
+        assertTrue(fileItemDao.findById(10).getGrade() == 3);
+        assertTrue(fileItemDao.findById(11).getGrade() == 4);
+        assertTrue(fileItemDao.findById(12).getGrade() == 5);
     }
     
     

@@ -31,6 +31,13 @@ public class ItemService {
         this.input = input;
     }
     
+    public void addToInput(Item item) {
+        this.input.add(item);
+    }
+    
+    public List<Item> getAll() {
+        return this.itemDao.getAll();
+    }
     
     public void setInputWithIds(int[] ids) {
         List<Item> newInput = new ArrayList<>();

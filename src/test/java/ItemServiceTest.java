@@ -10,6 +10,7 @@ import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -75,4 +76,28 @@ public class ItemServiceTest {
              assertTrue(item.equals(new Item("MP9 | Bulldozer", "Kokoelma2", 1)) ||item.equals(new Item("SG 553 | Tornado", "Kokoelma2", 1)));
         });
      }
+    
+    @Test
+    public void addToInputWorks() {
+        Item item = new Item("Item","Testipakkaus",10);
+        this.itemService.addToInput(item);
+        assertTrue(this.itemService.getInput().contains(item));
+    }
+    
+    @Test
+    public void setInputWorks() {
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            items.add(new Item(Integer.toString(i), Integer.toString(i), i));
+        }
+        this.itemService.setInput(items);
+        for (int i = 0; i < 10; i++) {
+            assertTrue(this.itemService.getInput().get(i).equals(items.get(i)));
+        }
+    }
+    
+    @Test
+    public void getAllWorks() {
+        assertTrue(this.itemService.getAll().size() == 13);
+    }
 }
