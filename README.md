@@ -9,7 +9,10 @@ Tällä hetkellä sovellus lukee käyttöönsä esineet /src/main/resources sija
 
 [Esitietoa](../master/dokumentaatio/esitietoa.md)
 
+[Arkkitehtuurikuvaus](../master/dokumentaatio/arkkitehtuuri.md)
+
 [Tuntikirjanpito](../master/dokumentaatio/tuntikirjanpito.md)
+
 
 ## Komentorivitoiminnot
 
@@ -28,3 +31,13 @@ mvn jacoco:report
 ```
 
 Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto _target/site/jacoco/index.html_
+
+### Checkstyle
+
+Checkstyle-tarkistukset suoritetaan komennolla
+
+```
+ mvn jxr:jxr checkstyle:checkstyle
+```
+
+Mahdolliset virheilmoitukset selviävät tiedostosta _target/site/checkstyle.html_
