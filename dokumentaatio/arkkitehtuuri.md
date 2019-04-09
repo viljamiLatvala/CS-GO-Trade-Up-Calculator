@@ -3,8 +3,8 @@
 ## Rakenne
 Ohjelma käytettä seuraavanlaista, kolmitasoista pakkausrakennetta:
 
-![Pakkausrakenne](https://github.com/viljamiLatvala/ohjelmistotekniikka/tree/master/dokumentaatio/pakkausrakenne.png "Pakkausrakenne")
+![Pakkausrakenne](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/pakkausrakenne.png )
 
 ## Luokkakaavio
 
-![Luokkakaavio](https://github.com/viljamiLatvala/ohjelmistotekniikka/tree/master/dokumentaatio/luokkakaavio.png "Luokkakaavio")
+![Luokkakaavio](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/luokkakaavio.png )
