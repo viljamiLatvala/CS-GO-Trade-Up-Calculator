@@ -5,13 +5,16 @@
  */
 package csgotuc.ui;
 
+import static com.sun.xml.internal.ws.developer.JAXWSProperties.CONNECT_TIMEOUT;
 import csgotuc.dao.Database;
 import csgotuc.dao.ItemDao;
 import csgotuc.dao.ItemFetchingService;
 import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -38,6 +41,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -53,16 +57,22 @@ public class Gui extends Application {
         try {
             //Path path = Paths.get(".", "/src/main/resources/object_data.csv");
             //ItemDao itemDao = new FileItemDao(path.normalize().toString());
+            File database = new File("./database.db");
+            if (!database.exists()) {
+                FileUtils.copyURLToFile(
+                        new URL("https://github.com/viljamiLatvala/ohjelmistotekniikka/raw/master/database.db"),
+                        new File("./database.db"));
+            }
             Database db = new Database("jdbc:sqlite:database.db");
             ItemDao itemDao = new SQLItemDao(db);
-            if(itemDao.getAll().isEmpty()) {
+            if (itemDao.getAll().isEmpty()) {
                 ItemFetchingService itemFetchingService = new ItemFetchingService();
                 List<Item> items = itemFetchingService.fetchAllItems();
                 for (Item item : items) {
                     itemDao.create(item);
                 }
             }
-            
+
             itemService = new ItemService(itemDao);
         } catch (IOException | ClassNotFoundException | SQLException e) {
             System.out.println(e);
@@ -99,16 +109,18 @@ public class Gui extends Application {
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     try {
-                            String clicked = list.getSelectionModel().getSelectedItem();
-                                try {
-                                    itemService.addToInput(map.get(clicked));
-                                } catch (Exception e) {
-                                    System.out.println(e.getMessage());
-                                }
-                            
-                        
+                        String clicked = list.getSelectionModel().getSelectedItem();
+                        try {
+                            itemService.addToInput(map.get(clicked));
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+
                         formInputLoadout(tilePane);
-                        formInputOptionList(list, map.get(clicked).getGrade());
+                        if (itemService.getInput().size() > 0 && itemService.getInput().size() < 2) {
+                            formInputOptionList(list, map.get(clicked).getGrade());
+                        }
+
                         formChart();
                         pieChart.setData(pieChartData);
                     } catch (SQLException ex) {
@@ -155,7 +167,7 @@ public class Gui extends Application {
             tilePane.getChildren().set(i, new Rectangle(100, 100, Color.GREEN));
         }
     }
-    
+
     public void formInputOptionList(ListView list, int grade) throws SQLException {
         ObservableMap<String, Item> map = FXCollections.observableHashMap();
         for (Item item : itemService.getByGrade(grade)) {

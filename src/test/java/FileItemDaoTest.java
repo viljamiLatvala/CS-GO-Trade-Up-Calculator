@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 
+import csgotuc.dao.Database;
 import csgotuc.dao.ItemDao;
+import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,55 +26,58 @@ import static org.junit.Assert.*;
  * @author latvavil
  */
 public class FileItemDaoTest {
-    ItemDao fileItemDao;
+
+    ItemDao itemDao;
+
     public FileItemDaoTest() {
-        
+
     }
-    
+
     @Before
-    public void setUp() {
-        Path path = Paths.get(".", "/src/test/java/FileItemDaoTestData.csv");
-        try {
-            fileItemDao = new FileItemDao(path.normalize().toString());
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
+    public void setUp() throws ClassNotFoundException {
+        Database db = new Database("jdbc:sqlite:database.db");
+        itemDao = new SQLItemDao(db);
     }
-    
+
     @After
     public void tearDown() {
     }
-    
+
     @Test
-    public void getAllReturnsAllItems() {
-        List<Item> list = fileItemDao.getAll();
-        assertEquals(13, list.size());
+    public void getAllReturnsAllItems() throws SQLException {
+        List<Item> list = itemDao.getAll();
+        assertEquals(765, list.size());
     }
-    
-    @Test 
-    public void getByIdRetunsCorrectObject() {
-        Item received = fileItemDao.findById(2);
-        assertEquals(new Item("Glock-18 | Fade", "Kokoelma2", 0), received);
-    }
-    
+
     @Test
-    public void getChildrenReturnsCorrectItems() {
-        Item parent = fileItemDao.findById(2);
-        List<Item> children = fileItemDao.getChildren(parent);
-        assertTrue(children.contains(new Item("MP9 | Bulldozer", "Kokoelma2",1)));
-        assertTrue(children.contains(new Item("SG 553 | Tornado", "Kokoelma2",1)));
+    public void getByIdRetunsCorrectObject() throws SQLException {
+        Item received = (Item)itemDao.findById(2);
+        assertEquals(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null), received);
+    }
+
+    @Test
+    public void getChildrenReturnsCorrectItems() throws SQLException {
+        Item parent = (Item)itemDao.findById(4);
+        List<Item> children = itemDao.getChildren(parent);
+        assertTrue(children.contains(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null)));
+        assertTrue(children.contains(new Item("Dual Berettas", "Twin Turbo", "The 2018 Inferno Collection", 4, null)));
         assertEquals(2, children.size());
     }
-    
+
     @Test
-    public void itemGradeIsSetCorrectly() {
-        assertTrue(fileItemDao.findById(0).getGrade() == 0);
-        assertTrue(fileItemDao.findById(1).getGrade() == 1);
-        assertTrue(fileItemDao.findById(9).getGrade() == 2);
-        assertTrue(fileItemDao.findById(10).getGrade() == 3);
-        assertTrue(fileItemDao.findById(11).getGrade() == 4);
-        assertTrue(fileItemDao.findById(12).getGrade() == 5);
+    public void itemGradeIsSetCorrectly() throws SQLException {
+        Item item = (Item)itemDao.findById(15);
+        assertTrue(item.getGrade() == 0);
+        item = (Item)itemDao.findById(11);
+        assertTrue(item.getGrade() == 1);
+        item = (Item)itemDao.findById(7);
+        assertTrue(item.getGrade() == 2);
+        item = (Item)itemDao.findById(1);
+        assertTrue(item.getGrade() == 3);
+        item = (Item)itemDao.findById(757);
+        assertTrue(item.getGrade() == 4);
+        item = (Item)itemDao.findById(754);
+        assertTrue(item.getGrade() == 5);
     }
-    
-    
+
 }

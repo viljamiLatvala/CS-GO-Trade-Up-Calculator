@@ -30,18 +30,17 @@ public class ItemFetchingService {
     public List<Item> fetchAllItems() throws IOException {
         List<String> collectionUrls = this.findCollectionUrls();
         List<String> itemUrls = new ArrayList<>();
-        
-        
+
         for (String curUrl : collectionUrls) {
             Document doc = Jsoup.connect(curUrl).get();
-        doc.select("p.nomargin").forEach(p -> {
-            String url = p.select("a[href]").attr("href");
-            if (!url.isEmpty() && !itemUrls.contains(url)) {
-                itemUrls.add(url);
-            }
-        });
+            doc.select("p.nomargin").forEach(p -> {
+                String url = p.select("a[href]").attr("href");
+                if (!url.isEmpty() && !itemUrls.contains(url)) {
+                    itemUrls.add(url);
+                }
+            });
         }
-        
+
         List<Item> items = fetchItemsFromUrls(itemUrls);
 
         return items;
@@ -82,12 +81,8 @@ public class ItemFetchingService {
             String collection = doc.select("p.collection-text-label").text();
             System.out.println("coll!: " + collection);
             byte[] img = downloadUrl(new URL(imgUrl));
-            System.out.println("Image url: " + imgUrl);
-            System.out.println("Weapon: " + weapon);
-            System.out.println("Design: " + design);
-            System.out.println("Grade: " + grade);
-            System.out.println("Collection: " + doc.select("p.collection-text-label").text());
             Item newItem = new Item(weapon, design, collection, getGrade(grade), downloadUrl(new URL(imgUrl)));
+            System.out.println("loaded: " + newItem.toString());
             items.add(newItem);
 
         }
@@ -97,22 +92,22 @@ public class ItemFetchingService {
 
     private int getGrade(String grade) {
         if (grade.equals("Consumer Grade")) {
-                    return 0;
-                } else if (grade.equals("Industrial Grade")) {
-                    return 1;
-                } else if (grade.equals("Mil-Spec")) {
-                    return 2;
-                } else if (grade.equals("Restricted")) {
-                    return 3;
-                } else if (grade.equals("Classified")) {
-                    return 4;
-                } else if (grade.equals("Covert")) {
-                    return 5;
-                } else {
-                    return 999;
-                }
+            return 0;
+        } else if (grade.equals("Industrial Grade")) {
+            return 1;
+        } else if (grade.equals("Mil-Spec")) {
+            return 2;
+        } else if (grade.equals("Restricted")) {
+            return 3;
+        } else if (grade.equals("Classified")) {
+            return 4;
+        } else if (grade.equals("Covert")) {
+            return 5;
+        } else {
+            return 999;
+        }
     }
-    
+
     private byte[] downloadUrl(URL toDownload) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 

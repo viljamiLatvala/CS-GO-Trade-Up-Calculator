@@ -22,16 +22,14 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     public SQLItemDao(Database database) {
         this.database = database;
     }
-    
-    
-    
+
     @Override
     public void create(Item item) throws SQLException {
         Connection connection = database.getConnection();
-        
+
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Item"
-            + " (name, weapon, design, collection, grade, image)"
-            + " VALUES (?, ?, ?, ?, ?, ?)");
+                + " (name, weapon, design, collection, grade, image)"
+                + " VALUES (?, ?, ?, ?, ?, ?)");
         stmt.setString(1, item.getName());
         stmt.setString(2, item.getWeapon());
         stmt.setString(3, item.getDesign());
@@ -47,89 +45,89 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     @Override
     public Item findById(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        
+
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE id = ?");
         stmt.setInt(1, key);
         ResultSet rs = stmt.executeQuery();
-        
-        if(!rs.next()) {
+
+        if (!rs.next()) {
             return null;
         }
-        
-       Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+
+        Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
 
         stmt.close();
         rs.close();
         connection.close();
 
-        return (Item)fetchedItem;
+        return (Item) fetchedItem;
     }
 
     @Override
     public List<Item> getAll() throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();
-        
+
         Connection connection = database.getConnection();
-  
+
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item");
         ResultSet rs = stmt.executeQuery();
-        
-        while(rs.next()) {
-            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"),rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+
+        while (rs.next()) {
+            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
             fetchedItems.add(fetchedItem);
         }
-        
+
         stmt.close();
         rs.close();
         connection.close();
 
-        return fetchedItems;        
+        return fetchedItems;
     }
 
     @Override
     public List<Item> getChildren(Item inputItem) throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();
         String collection = inputItem.getCollection();
-        int grade = inputItem.getGrade() +1;
-        
+        int grade = inputItem.getGrade() + 1;
+
         Connection connection = database.getConnection();
-  
+
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE collection = ? AND grade = ?");
         stmt.setString(1, collection);
         stmt.setInt(2, grade);
         ResultSet rs = stmt.executeQuery();
-        
-        while(rs.next()) {
+
+        while (rs.next()) {
             Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
             fetchedItems.add(fetchedItem);
         }
-        
+
         stmt.close();
         rs.close();
         connection.close();
-        return fetchedItems; 
+        return fetchedItems;
     }
 
     @Override
     public List<Item> getByGrade(int grade) throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();
-        
+
         Connection connection = database.getConnection();
-  
+
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade = ?");
         stmt.setInt(1, grade);
         ResultSet rs = stmt.executeQuery();
-        
-        while(rs.next()) {
+
+        while (rs.next()) {
             Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
             fetchedItems.add(fetchedItem);
         }
-        
+
         stmt.close();
         rs.close();
         connection.close();
 
-        return fetchedItems; 
+        return fetchedItems;
     }
 
 }
