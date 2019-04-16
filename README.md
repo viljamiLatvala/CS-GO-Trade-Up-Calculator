@@ -2,7 +2,7 @@
 
 Sovelluksen käyttäjien on mahdollista simuloida Counter-Strike Global Offensice-pelissä tavaroille tehtäviä Trade Up sopimuksia. Sopimuksissa pelaajan on mahdollista vaihtaa 10 omistamaansa esinettä yhteen ylemmän harvinaisuusluokan esineeseen. Saatava uusi esine pohjautuu vaihtokaupaan sijoitettaviin alemman harvinaisuusluokan esineisiin.
 
-Tällä hetkellä sovellus lukee käyttöönsä esineet /src/main/resources sijainnissa olevasta .csv tiedostosta. Työhön toteutettu yksinkertainen tekstikäyttöliittymä mahdollistaa esineiden lisäämisen sopimuksen inputtiin antamalla edineen ID-numeron, joka on siis käytännössä esineen rivinumero .csv-tiedostossa nollasta alkaen. Tämän jälkeen ohjelma suorittaa laskun ja palauttaa listan esineistä joista yhden käyttäjän on mahdollista saada vaihtokaupassa. Esineen yhteydessä on ilmoitettu myös todennäköisyys tuon esineen saamiselle.
+Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niiden tiedot niitä listaavalta [CS:GO Stash](https://csgostash.com)-sivustolta. Toistaiseksi luokkaa ei voi käyttää käyttöliittymästä, vaan sovelluksen käyttöön on muodostettu valmis tietokanta luokan avulla. Sovellus tarjoaa graafisen käyttöliittymän, mutta joitain ilmoituksia annetaan toistaiseksi konsoliin.
 
 ## Dokumentaatio
 [Vaatimusmäärittely](../master/dokumentaatio/vaatimusmaarittely.md)
