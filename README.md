@@ -13,6 +13,8 @@ Tällä hetkellä sovellus lukee käyttöönsä esineet /src/main/resources sija
 
 [Tuntikirjanpito](../master/dokumentaatio/tuntikirjanpito.md)
 
+## Releaset
+[Viikko 5](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/viikko5)
 
 ## Komentorivitoiminnot
 
