@@ -5,7 +5,6 @@
  */
 package csgotuc.ui;
 
-import static com.sun.xml.internal.ws.developer.JAXWSProperties.CONNECT_TIMEOUT;
 import csgotuc.dao.Database;
 import csgotuc.dao.ItemDao;
 import csgotuc.dao.ItemFetchingService;
