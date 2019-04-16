@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-import csgotuc.dao.FileItemDao;
 import csgotuc.dao.ItemDao;
 import csgotuc.domain.Item;
 import java.nio.file.Path;

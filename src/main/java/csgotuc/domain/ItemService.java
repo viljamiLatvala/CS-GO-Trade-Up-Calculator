@@ -5,10 +5,11 @@
  */
 package csgotuc.domain;
 
-import csgotuc.domain.Item;
+
+import csgotuc.dao.ItemDao;
 import java.util.ArrayList;
 import java.util.List;
-import csgotuc.dao.ItemDao;
+import java.sql.SQLException;
 
 /**
  *
@@ -32,6 +33,7 @@ public class ItemService {
     }
     
     public void addToInput(Item item) {
+        System.out.println(item.toString());
         if (this.input.size() >= 10) {
             throw new IllegalArgumentException("Maximum input size is 10!");
         } else if (this.input.size() > 0 && this.input.get(0).getGrade() != item.getGrade()) {
@@ -43,26 +45,26 @@ public class ItemService {
         }
     }
     
-    public List<Item> getAll() {
+    public List<Item> getAll() throws SQLException {
         return this.itemDao.getAll();
     }
     
-    public List<Item> getByGrade(int grade) {
+    public List<Item> getByGrade(int grade) throws SQLException {
         return this.itemDao.getByGrade(grade);
     }
     
-    public void setInputWithIds(int[] ids) {
+    public void setInputWithIds(int[] ids) throws SQLException {
         List<Item> newInput = new ArrayList<>();
         for (int id : ids) {
-            newInput.add(itemDao.findById(id));
+            newInput.add((Item)itemDao.findById(id));
         }
         this.input = newInput;
     }
     
-    public List<Item> calculateTradeUp() {
+    public List<Item> calculateTradeUp() throws SQLException {
         List<Item> output = new ArrayList<>();
         for (Item item : this.input) {
-            for (Item outputItem : itemDao.getChildren(item)) {
+            for (Item outputItem : (List<Item>)itemDao.getChildren(item)) {
                 output.add(outputItem);
             }
         }

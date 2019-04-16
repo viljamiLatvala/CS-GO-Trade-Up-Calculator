@@ -7,15 +7,21 @@ package csgotuc.dao;
 
 import java.util.List;
 import csgotuc.domain.Item;
+import java.sql.*;
+import java.util.*;
 
 /**
  *
  * @author latvavil
+ * @param <Item>
+ * @param <Integer>
  */
-public interface ItemDao {
-    List<Item> getAll();
-    List<Item> getChildren(Item inputItem);
-    Item findById(int id);
-    List<Item> getByGrade(int grade);
+public interface ItemDao<Item, Integer> {
+
+    void create(Item item) throws SQLException;
+    List<Item> getAll() throws SQLException;
+    List<Item> getChildren(Item inputItem) throws SQLException;
+    Item findById(Integer key) throws SQLException;
+    List<Item> getByGrade(int grade) throws SQLException;
     
 }

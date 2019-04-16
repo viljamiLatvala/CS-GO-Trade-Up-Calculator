@@ -5,15 +5,21 @@
  */
 package csgotuc.ui;
 
-import csgotuc.dao.FileItemDao;
+import csgotuc.dao.Database;
 import csgotuc.dao.ItemDao;
+import csgotuc.dao.ItemFetchingService;
+import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,10 +51,20 @@ public class Gui extends Application {
     @Override
     public void init() {
         try {
-            Path path = Paths.get(".", "/src/main/resources/object_data.csv");
-            ItemDao itemDao = new FileItemDao(path.normalize().toString());
+            //Path path = Paths.get(".", "/src/main/resources/object_data.csv");
+            //ItemDao itemDao = new FileItemDao(path.normalize().toString());
+            Database db = new Database("jdbc:sqlite:database.db");
+            ItemDao itemDao = new SQLItemDao(db);
+            if(itemDao.getAll().isEmpty()) {
+                ItemFetchingService itemFetchingService = new ItemFetchingService();
+                List<Item> items = itemFetchingService.fetchAllItems();
+                for (Item item : items) {
+                    itemDao.create(item);
+                }
+            }
+            
             itemService = new ItemService(itemDao);
-        } catch (Exception e) {
+        } catch (IOException | ClassNotFoundException | SQLException e) {
             System.out.println(e);
         }
 
@@ -56,7 +72,7 @@ public class Gui extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws SQLException {
         //Input-esittely
         TilePane tilePane = new TilePane();
         tilePane.setVgap(4);
@@ -82,16 +98,22 @@ public class Gui extends Application {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 2) {
-                    String clicked = list.getSelectionModel().getSelectedItem();
                     try {
-                        itemService.addToInput(map.get(clicked));
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                            String clicked = list.getSelectionModel().getSelectedItem();
+                                try {
+                                    itemService.addToInput(map.get(clicked));
+                                } catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            
+                        
+                        formInputLoadout(tilePane);
+                        formInputOptionList(list, map.get(clicked).getGrade());
+                        formChart();
+                        pieChart.setData(pieChartData);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    formInputLoadout(tilePane);
-                    formInputOptionList(list, map.get(clicked).getGrade());
-                    formChart();
-                    pieChart.setData(pieChartData);
                 }
             }
         });
@@ -108,7 +130,7 @@ public class Gui extends Application {
         primaryStage.show();
     }
 
-    public void formChart() {
+    public void formChart() throws SQLException {
         pieChartData = FXCollections.observableArrayList();
         List<Item> outcomePool = this.itemService.calculateTradeUp();
         int poolSize = outcomePool.size();
@@ -134,7 +156,7 @@ public class Gui extends Application {
         }
     }
     
-    public void formInputOptionList(ListView list, int grade) {
+    public void formInputOptionList(ListView list, int grade) throws SQLException {
         ObservableMap<String, Item> map = FXCollections.observableHashMap();
         for (Item item : itemService.getByGrade(grade)) {
             map.put(item.getName(), item);
