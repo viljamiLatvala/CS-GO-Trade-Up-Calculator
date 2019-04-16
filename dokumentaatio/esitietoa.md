@@ -4,6 +4,10 @@ Counter-Strike: Global Offensive on First-person shooter-tyyppinen tietokonepeli
 
 Pelissä oleviin skineihin liittyy muutamia ominaisuuksia. Näitä ovat asekokoelma johon ase kuuluu, aseen laatuluokitus, kulutusluokitus ja kulutustaso. Peli tarjoaa pelaajille mahdollisuuden tarttua Trade Up-vaihtosopimukseen, jossa pelaaja valitsee tuotantopanokseksi 10 laatuluokitukseltaan samanarvoista skiniä ja saa näiden esineiden tilalle yhden laatuluokitukseltaan seuraavaa tasoa olevan esineen. Tämän tuotantotuloksen määrittää vaihtosopimuksessa tuotantopanoksena käytettyjen kymmenen esineen laatuluokitus, asekokoelma josta ne ovat, sekä kulutustaso(ja sen pohjalta määräytyvä kulutusluokitus).
 
+Mekanismin toiminnasta on tarjolla runsaasti pelaaja-yhteisön tuottamaa tietoa, joihin myös tämän sovelluksen toiminta pohjautuu. Kattava kirjoitus aiheesta esimerkiksi [Reddit-palvelussa](https://www.reddit.com/r/GlobalOffensiveTrade/comments/7wam74/psa_xcobalts_complete_guide_to_the_trade_up/?depth=1)
+
+
+
 ## Trade Up -sopimuksen tarkempi toimintaperiaate
 Trade Up sopimus määrittää tuotantotuloksena saatavan esineen seuraavalla tavalla:
 - Jokaista sopimuksen inputtina käytettävää esinettä kohden mahdollisten tuotantotulosten joukkoon lisätään kaikki tuon esineen kanssa samaan kokoelmaan kuuluvat, yhtä laatuluokitusta suuremmat esineet.
@@ -13,6 +17,3 @@ Trade Up sopimus määrittää tuotantotuloksena saatavan esineen seuraavalla ta
 
 Trade Up sopimus määrittää tuotantotuloksena saatavan esineen kuntoluokituksen seuraavalla tavalla:
 TODO
-
-## Työssä käytettävä terminologia
-todo
