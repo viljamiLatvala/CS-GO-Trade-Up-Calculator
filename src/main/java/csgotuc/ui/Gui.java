@@ -11,14 +11,11 @@ import csgotuc.dao.ItemFetchingService;
 import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +25,12 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -47,11 +42,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
@@ -69,8 +61,6 @@ public class Gui extends Application {
     @Override
     public void init() {
         try {
-            //Path path = Paths.get(".", "/src/main/resources/object_data.csv");
-            //ItemDao itemDao = new FileItemDao(path.normalize().toString());
             File database = new File("./database.db");
             if (!database.exists()) {
                 FileUtils.copyURLToFile(
@@ -97,11 +87,9 @@ public class Gui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws SQLException {
-        //Anchor pane ase rootPane
         this.itemPreview = new ImageView();
         AnchorPane rootPane = new AnchorPane();
 
-        //Input-esittely
         TilePane tilePane = new TilePane();
         tilePane.setVgap(4);
         tilePane.setHgap(4);
@@ -111,74 +99,53 @@ public class Gui extends Application {
             tilePane.getChildren().add(itemGroup);
         }
 
-        //Presentation of the output
         pieChart = new PieChart();
 
-        //New ListView menu
-        //EventHandlers for ListCells
         ListView<Item> inputListView = new ListView<>();
         ObservableList<Item> testItems = FXCollections.observableArrayList();
         itemService.getPossibleInputs().forEach(item -> testItems.add(item));
 
-        EventHandler<MouseEvent> mouseEnteredHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                Object clickedObject = e.getSource();
-                if (clickedObject instanceof ListCell) {
-                    ListCell cell = (ListCell) clickedObject;
-                    Item item = (Item) cell.getItem();
-                    Image image;
-                    try {
-                        //Image to be replaced
-                        image = new Image(new FileInputStream("./reference_item.png"));
-                        itemPreview.setImage(image);
-                        itemPreview.setX(e.getSceneX());
-                        itemPreview.setY(e.getSceneY());
-                        itemPreview.setFitHeight(100);
-                        itemPreview.setPreserveRatio(true);
+        EventHandler<MouseEvent> mouseEnteredHandler = (MouseEvent e) -> {
+            Object clickedObject = e.getSource();
+            try {
+                //Image to be replaced
+                Image image = new Image(new FileInputStream("./reference_item.png"));
+                itemPreview.setImage(image);
+                itemPreview.setX(e.getSceneX());
+                itemPreview.setY(e.getSceneY());
+                itemPreview.setFitHeight(100);
+                itemPreview.setPreserveRatio(true);
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        };
 
-                    } catch (FileNotFoundException ex) {
+        EventHandler<MouseEvent> mouseExitedHandler = (MouseEvent e) -> {
+            itemPreview.setImage(null);
+        };
+
+        EventHandler<MouseEvent> mouseClickedHandler = (MouseEvent e) -> {
+            if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                Object clickedObject = e.getSource();
+                Item item = (Item) ((ListCell) clickedObject).getItem();
+                itemService.addToInput(item);
+                
+                formInputLoadout(tilePane);
+                if (itemService.getInput().size() == 1) {
+                    try {
+                        formInputOptionList(inputListView, item.getGrade());
+                    } catch (SQLException ex) {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            }
-        };
-
-        EventHandler<MouseEvent> mouseExitedHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                itemPreview.setImage(null);
-            }
-        };
-
-        EventHandler<MouseEvent> mouseClickedHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
-                    Object clickedObject = e.getSource();
-                    if (clickedObject instanceof ListCell) {
-                        ListCell cell = (ListCell) clickedObject;
-                        Item item = (Item) cell.getItem();
-                        itemService.addToInput(item);
-
-                        formInputLoadout(tilePane);
-                        System.out.println(itemService.getInput().size());
-                        if (itemService.getInput().size() == 1) {
-                            try {
-                                formInputOptionList(inputListView, item.getGrade());
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-
-                        try {
-                            formChart();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        pieChart.setData(pieChartData);
-                    }
+                
+                try {
+                    formChart();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                pieChart.setData(pieChartData);
             }
         };
 
@@ -203,7 +170,6 @@ public class Gui extends Application {
         );
         inputListView.setItems(testItems);
 
-        //HBox to contain all 3 stationary menus
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10));
         hbox.setSpacing(8);
@@ -236,9 +202,9 @@ public class Gui extends Application {
         }
 
         pieChartData = FXCollections.observableArrayList();
-        for (Item item : outcomeDist.keySet()) {
+        outcomeDist.keySet().forEach((item) -> {
             pieChartData.add(new PieChart.Data(item.getName(), outcomeDist.get(item)));
-        }
+        });
 
     }
 
@@ -247,9 +213,10 @@ public class Gui extends Application {
         List<Item> input = this.itemService.getInput();
         for (int i = 0; i < input.size(); i++) {
             int curIndex = i;
-            Item curItem = input.get(i);
 
-            if (this.itemService.getInputItem(i) != null) {
+            if (this.itemService.getInputItem(i) == null){
+                continue;
+            }
                 Group newGroup = new Group(new Rectangle(100, 100, Color.DARKSEAGREEN));
                 Image image = null;
                 try {
@@ -267,35 +234,26 @@ public class Gui extends Application {
                 double yAlignment = newGroup.getLayoutY() + ((100 - actHeight) / 2);
                 newGroup.getChildren().add(img);
                 newGroup.getChildren().get(1).relocate(xAlignment, yAlignment);
-                // create a menu 
+                
                 ContextMenu contextMenu = new ContextMenu();
 
-                // create menuitems 
                 MenuItem remove = new MenuItem("Remove");
-                remove.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        System.out.println("REMOVE:" + curItem.getName());
-                        itemService.removeFromInput(curIndex);
-                        System.out.println("input size: " + itemService.getInput().size());
-                        Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
-                        tilePane.getChildren().remove(curIndex);
-                        tilePane.getChildren().add(curIndex, itemGroup);
-                        try {
-                            formChart();
-                            pieChart.setData(pieChartData);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                remove.setOnAction((ActionEvent event) -> {
+                    itemService.removeFromInput(curIndex);
+                    Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
+                    tilePane.getChildren().remove(curIndex);
+                    tilePane.getChildren().add(curIndex, itemGroup);
+                    try {
+                        formChart();
+                        pieChart.setData(pieChartData);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
-                // add menu items to menu 
                 contextMenu.getItems().add(remove);
-
                 newGroup.setOnContextMenuRequested(e -> contextMenu.show(newGroup, e.getScreenX(), e.getScreenY()));
-
                 tilePane.getChildren().set(i, newGroup);
-            }
+            
 
         }
     }

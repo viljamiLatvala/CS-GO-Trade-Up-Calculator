@@ -21,13 +21,11 @@ import java.util.TreeMap;
 public class ItemService {
 
     private ItemDao itemDao;
-    private List<Item> input;
     private SortedMap<Integer, Item> inputMap;
-    private ArrayList<Integer> freeSlots; 
+    private ArrayList<Integer> freeSlots;
 
     public ItemService(ItemDao itemDao) {
         this.itemDao = itemDao;
-        this.input = new ArrayList<>();
         this.inputMap = new TreeMap<>();
         this.freeSlots = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -42,47 +40,19 @@ public class ItemService {
         return inputList;
     }
 
-    public SortedMap<Integer, Item> getInputMap() {
-        return inputMap;
-    }
-
-    public void setInputMap(SortedMap<Integer, Item> inputMap) {
-        this.inputMap = inputMap;
-    }
-    
     public List<Item> getPossibleInputs() throws SQLException {
         return this.itemDao.getPossibleInputs();
     }
-    
-    
+
     public Item getInputItem(int key) {
         Item item = this.inputMap.get(key);
         return item;
     }
-    
-    public void removeFromInput(Item item) {
-        List<Integer> toRemove = new ArrayList<>();
-        for (Integer integer : inputMap.keySet()) {
-            if(inputMap.get(integer).equals(item)){
-                System.out.println("EQUALS!");
-                toRemove.add(integer);
-            }
-        }
-        freeSlots.add(toRemove.get(0));
-        Collections.sort(freeSlots);
-        inputMap.remove(toRemove.get(0));
-        System.out.println("FreeSlots: " + this.freeSlots.toString());
-    }
-    
-        public void removeFromInput(int slot) {
-            this.inputMap.remove(slot);
-            this.freeSlots.add(slot);
-            Collections.sort(this.freeSlots);
-        System.out.println("FreeSlots: " + this.freeSlots.toString());
-    }
 
-    public void setInput(List<Item> input) {
-        input.forEach(item -> addToInput(item));
+    public void removeFromInput(int slot) {
+        this.inputMap.remove(slot);
+        this.freeSlots.add(slot);
+        Collections.sort(this.freeSlots);
     }
 
     public void addToInput(Item item) {
@@ -94,13 +64,11 @@ public class ItemService {
         } else if (item.getGrade() > 4) {
             throw new IllegalArgumentException("Item grade must be below 6");
         } else {
-            System.out.println("Laitetaan indeksiin: " + this.freeSlots.get(0));
             this.inputMap.put(this.freeSlots.get(0), item);
             this.freeSlots.remove(0);
             Collections.sort(this.freeSlots);
-            System.out.println("FreeSlots: " + this.freeSlots.toString());
         }
-            
+
     }
 
     public List<Item> getAll() throws SQLException {
@@ -114,9 +82,8 @@ public class ItemService {
     public void setInputWithIds(int[] ids) throws SQLException {
         List<Item> newInput = new ArrayList<>();
         for (int id : ids) {
-            newInput.add((Item) itemDao.findById(id));
+            addToInput((Item) itemDao.findById(id));
         }
-        this.input = newInput;
     }
 
     public List<Item> calculateTradeUp() throws SQLException {
