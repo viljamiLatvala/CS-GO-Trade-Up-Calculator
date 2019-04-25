@@ -13,6 +13,7 @@ public class Item {
     private String design;
     private String weapon;
     private String collection;
+    private double floatValue;
     private int grade;
     private byte[] image;
 
@@ -24,6 +25,7 @@ public class Item {
         this.collection = collection;
         this.grade = grade;
         this.image = image;
+        this.floatValue = 0;
     }
 
     public String getName() {

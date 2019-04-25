@@ -8,5 +8,5 @@
 | 9.4. | 7h | JavaFx:n toimintaan tutustumista, Graafisen käyttöliittymän luomista, testien täydentämistä ja arkkitehtuuridokumentin luominen, Käyttäjän sovellukselle antamien ohjeiden validointia osana sovelluslogiikkaa, Käyttöliittymälle tietoa antavia metodeja lisätty sovelluslogiikaan |
 | 16.4. | 11h | JSoup-parsimisen opettelua, SQL-tietokannan muodostamista verkosta parsituista tiedoista, Testien muuttamista yhteensopiviksi SQL-tietokannan kanssa. Dokumentaation päivittäminen sekvenssikaaviolla |
 Yhteensä: 24,5h
-| 25.4. | 1.5h | Käyttöliittymäelementtien toiminnan harjoittelua |
+| 25.4. | 6.5h | Käyttöliittymäelementtien toiminnan harjoittelua, Käyttöliittymän graafisuuden parantamista |
 Yhteensä: 26h

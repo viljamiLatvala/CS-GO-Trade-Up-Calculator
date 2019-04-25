@@ -11,7 +11,10 @@ import csgotuc.dao.ItemFetchingService;
 import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -26,19 +29,29 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
@@ -50,6 +63,8 @@ public class Gui extends Application {
 
     private ItemService itemService;
     private ObservableList<PieChart.Data> pieChartData;
+    private ImageView itemPreview;
+    private PieChart pieChart;
 
     @Override
     public void init() {
@@ -82,67 +97,131 @@ public class Gui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws SQLException {
+        //Anchor pane ase rootPane
+        this.itemPreview = new ImageView();
+        AnchorPane rootPane = new AnchorPane();
+
         //Input-esittely
         TilePane tilePane = new TilePane();
         tilePane.setVgap(4);
         tilePane.setHgap(4);
         tilePane.setPrefColumns(4);
         for (int i = 0; i < 10; i++) {
-            tilePane.getChildren().add(new Rectangle(100, 100));
+            Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
+            tilePane.getChildren().add(itemGroup);
         }
 
-        //Output-esittely
-        PieChart pieChart = new PieChart();
+        //Presentation of the output
+        pieChart = new PieChart();
 
-        //Input-valinta
-        ListView<String> list = new ListView<String>();
+        //New ListView menu
+        //EventHandlers for ListCells
+        ListView<Item> inputListView = new ListView<>();
+        ObservableList<Item> testItems = FXCollections.observableArrayList();
+        itemService.getAll().forEach(item -> testItems.add(item));
 
-        ObservableMap<String, Item> map = FXCollections.observableHashMap();
-        for (Item item : itemService.getAll()) {
-            map.put(item.getName(), item);
-        }
-
-        list.getItems().setAll(map.keySet());
-        list.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> mouseEnteredHandler = new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                if (event.getClickCount() == 2) {
+            public void handle(MouseEvent e) {
+                Object clickedObject = e.getSource();
+                if (clickedObject instanceof ListCell) {
+                    ListCell cell = (ListCell) clickedObject;
+                    Item item = (Item) cell.getItem();
+                    Image image;
                     try {
-                        String clicked = list.getSelectionModel().getSelectedItem();
-                        try {
-                            itemService.addToInput(map.get(clicked));
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
+                        //Image to be replaced
+                        image = new Image(new FileInputStream("./reference_item.png"));
+                        itemPreview.setImage(image);
+                        itemPreview.setX(e.getSceneX());
+                        itemPreview.setY(e.getSceneY());
+                        itemPreview.setFitHeight(100);
+                        itemPreview.setPreserveRatio(true);
 
-                        formInputLoadout(tilePane);
-                        if (itemService.getInput().size() > 0 && itemService.getInput().size() < 2) {
-                            formInputOptionList(list, map.get(clicked).getGrade());
-                        }
-
-                        formChart();
-                        pieChart.setData(pieChartData);
-                    } catch (SQLException ex) {
+                    } catch (FileNotFoundException ex) {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
-        });
+        };
 
+        EventHandler<MouseEvent> mouseExitedHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                itemPreview.setImage(null);
+            }
+        };
+
+        EventHandler<MouseEvent> mouseClickedHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                    Object clickedObject = e.getSource();
+                    if (clickedObject instanceof ListCell) {
+                        ListCell cell = (ListCell) clickedObject;
+                        Item item = (Item) cell.getItem();
+                        itemService.addToInput(item);
+
+                        formInputLoadout(tilePane);
+                        System.out.println(itemService.getInput().size());
+                        if (itemService.getInput().size() == 1) {
+                            try {
+                                formInputOptionList(inputListView, item.getGrade());
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                        try {
+                            formChart();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        pieChart.setData(pieChartData);
+                    }
+                }
+            }
+        };
+
+        inputListView.setCellFactory(item -> {
+            return new ListCell<Item>() {
+                @Override
+                protected void updateItem(Item item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item.getName());
+                        setOnMouseEntered(mouseEnteredHandler);
+                        setOnMouseClicked(mouseClickedHandler);
+                        setOnMouseExited(mouseExitedHandler);
+                    }
+                }
+            };
+        }
+        );
+        inputListView.setItems(testItems);
+
+        //HBox to contain all 3 stationary menus
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10));
         hbox.setSpacing(8);
-        hbox.getChildren().add(list);
+        hbox.getChildren().add(inputListView);
         hbox.getChildren().add(tilePane);
         hbox.getChildren().add(pieChart);
 
-        primaryStage.setScene(new Scene(hbox));
+        rootPane.getChildren().add(hbox);
+        rootPane.getChildren().add(itemPreview);
+
+        primaryStage.setScene(new Scene(rootPane));
         primaryStage.setTitle("CSGO Trade-Up Calculator");
         primaryStage.show();
     }
 
     public void formChart() throws SQLException {
         pieChartData = FXCollections.observableArrayList();
+
         List<Item> outcomePool = this.itemService.calculateTradeUp();
         int poolSize = outcomePool.size();
         Map<Item, Integer> outcomeDist = new HashMap<>();
@@ -155,6 +234,8 @@ public class Gui extends Application {
                 outcomeDist.put(curItem, 1);
             }
         }
+
+        pieChartData = FXCollections.observableArrayList();
         for (Item item : outcomeDist.keySet()) {
             pieChartData.add(new PieChart.Data(item.getName(), outcomeDist.get(item)));
         }
@@ -162,17 +243,66 @@ public class Gui extends Application {
     }
 
     public void formInputLoadout(TilePane tilePane) {
-        for (int i = 0; i < this.itemService.getInput().size(); i++) {
-            tilePane.getChildren().set(i, new Rectangle(100, 100, Color.GREEN));
+        List<Item> input = this.itemService.getInput();
+        for (int i = 0; i < input.size(); i++) {
+            int curIndex = i;
+            Item curItem = input.get(i);
+            Group newGroup = new Group(new Rectangle(100, 100, Color.DARKSEAGREEN));
+            Image image = null;
+            try {
+                image = new Image(new FileInputStream("./reference_item.png"));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ImageView img = new ImageView(image);
+            img.setFitHeight(100);
+            img.setFitWidth(100);
+            img.setPreserveRatio(true);
+            double actWidth = img.getBoundsInLocal().getWidth();
+            double actHeight = img.getBoundsInLocal().getHeight();
+            double xAlignment = newGroup.getLayoutX() + ((100 - actWidth) / 2);
+            double yAlignment = newGroup.getLayoutY() + ((100 - actHeight) / 2);
+            newGroup.getChildren().add(img);
+            newGroup.getChildren().get(1).relocate(xAlignment, yAlignment);
+            // create a menu 
+            ContextMenu contextMenu = new ContextMenu();
+
+            // create menuitems 
+            MenuItem remove = new MenuItem("Remove");
+            remove.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("REMOVE:" + curItem.getName());
+                    int tileIndex;
+                    itemService.removeFromInput(curItem);
+                    System.out.println("input size: " + itemService.getInput().size());
+                    Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
+                    tilePane.getChildren().remove(curIndex);
+                    tilePane.getChildren().add(curIndex, itemGroup);
+                    try {
+                        formChart();
+                        pieChart.setData(pieChartData);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            });
+            // add menu items to menu 
+            contextMenu.getItems().add(remove);
+
+            newGroup.setOnContextMenuRequested(e -> contextMenu.show(newGroup, e.getScreenX(), e.getScreenY()));
+
+            tilePane.getChildren().set(i, newGroup);
+
+            //Context menu
         }
     }
 
     public void formInputOptionList(ListView list, int grade) throws SQLException {
-        ObservableMap<String, Item> map = FXCollections.observableHashMap();
-        for (Item item : itemService.getByGrade(grade)) {
-            map.put(item.getName(), item);
-        }
-        list.getItems().setAll(map.keySet());
+        ObservableList<Item> newListItems = FXCollections.observableArrayList();
+        itemService.getByGrade(grade).forEach(item -> newListItems.add(item));
+        list.getItems().setAll(newListItems);
     }
 
     @Override
