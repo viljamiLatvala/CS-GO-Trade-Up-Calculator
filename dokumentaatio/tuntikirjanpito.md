@@ -7,6 +7,5 @@
 | 2.4. | 4,5h | ItemDao-rajapinnan määrittely, sen toteuttavan FileItemDao:n luonti, perussovelluslogiikan rakentaminen, väliaikaisen tekstikäyttöliittymän luominen, testien kirjoittaminen |
 | 9.4. | 7h | JavaFx:n toimintaan tutustumista, Graafisen käyttöliittymän luomista, testien täydentämistä ja arkkitehtuuridokumentin luominen, Käyttäjän sovellukselle antamien ohjeiden validointia osana sovelluslogiikkaa, Käyttöliittymälle tietoa antavia metodeja lisätty sovelluslogiikaan |
 | 16.4. | 11h | JSoup-parsimisen opettelua, SQL-tietokannan muodostamista verkosta parsituista tiedoista, Testien muuttamista yhteensopiviksi SQL-tietokannan kanssa. Dokumentaation päivittäminen sekvenssikaaviolla |
-Yhteensä: 24,5h
-| 25.4. | 7.5h | Käyttöliittymäelementtien toiminnan harjoittelua, Käyttöliittymän graafisuuden parantamista, bugikorjauksia, koodin siistimistä |
-Yhteensä: 26h
+| 25.4. | 9.5h | Käyttöliittymäelementtien toiminnan harjoittelua, Käyttöliittymän graafisuuden parantamista, bugikorjauksia, koodin siistimistä, esineen kuluneisuuden laskennan toiminnallisuus toteutettu |
+Yhteensä: 34h

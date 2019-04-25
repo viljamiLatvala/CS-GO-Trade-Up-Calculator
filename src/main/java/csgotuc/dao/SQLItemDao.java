@@ -28,14 +28,16 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         Connection connection = database.getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Item"
-                + " (name, weapon, design, collection, grade, image)"
-                + " VALUES (?, ?, ?, ?, ?, ?)");
+                + " (name, weapon, design, collection, grade, minwear, maxwear, image)"
+                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         stmt.setString(1, item.getName());
         stmt.setString(2, item.getWeapon());
         stmt.setString(3, item.getDesign());
         stmt.setString(4, item.getCollection());
         stmt.setInt(5, item.getGrade());
-        stmt.setBytes(6, item.getImage());
+        stmt.setDouble(6, item.getMinWear());
+        stmt.setDouble(7, item.getMaxWear());
+        stmt.setBytes(8, item.getImage());
 
         stmt.executeUpdate();
         stmt.close();

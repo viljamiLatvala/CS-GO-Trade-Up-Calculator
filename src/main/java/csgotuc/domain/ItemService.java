@@ -87,12 +87,20 @@ public class ItemService {
     }
 
     public List<Item> calculateTradeUp() throws SQLException {
+        double floatAvg = 0;
         List<Item> output = new ArrayList<>();
         for (Item item : this.inputMap.values()) {
+            floatAvg += item.getFloatValue();
             for (Item outputItem : (List<Item>) itemDao.getChildren(item)) {
                 output.add(outputItem);
             }
         }
+        floatAvg /= inputMap.values().size();
+        for (Item item : output) {
+            item.setFloatValue((item.getMaxWear()-item.getMinWear())*floatAvg+item.getMaxWear());
+            System.out.println(item.toString() + ", float: " + item.getFloatValue());
+        }
+        System.out.println("");
         return output;
     }
 }

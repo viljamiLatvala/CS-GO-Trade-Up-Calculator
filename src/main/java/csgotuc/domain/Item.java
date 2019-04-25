@@ -16,6 +16,8 @@ public class Item {
     private double floatValue;
     private int grade;
     private byte[] image;
+    private double minWear;
+    private double maxWear;
 
 
     public Item(String weapon, String design, String collection, int grade, byte[] image) {
@@ -27,6 +29,31 @@ public class Item {
         this.image = image;
         this.floatValue = 0;
     }
+
+    public double getFloatValue() {
+        return floatValue;
+    }
+
+    public void setFloatValue(double floatValue) {
+        this.floatValue = floatValue;
+    }
+
+    public double getMinWear() {
+        return minWear;
+    }
+
+    public void setMinWear(double minWear) {
+        this.minWear = minWear;
+    }
+
+    public double getMaxWear() {
+        return maxWear;
+    }
+
+    public void setMaxWear(double maxWear) {
+        this.maxWear = maxWear;
+    }
+
 
     public String getName() {
         return name;

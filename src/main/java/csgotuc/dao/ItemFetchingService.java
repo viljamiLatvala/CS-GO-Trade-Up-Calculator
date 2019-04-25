@@ -10,8 +10,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -22,12 +25,15 @@ import org.jsoup.nodes.Document;
 public class ItemFetchingService {
 
     private String baseUrl;
+    private ItemDao itemDao;
 
-    public ItemFetchingService() {
+    public ItemFetchingService(ItemDao dao) {
         baseUrl = "https://csgostash.com/";
+        this.itemDao = dao;
+        
     }
 
-    public List<Item> fetchAllItems() throws IOException {
+    public void fetchAllItems() throws IOException {
         List<String> collectionUrls = this.findCollectionUrls();
         List<String> itemUrls = new ArrayList<>();
 
@@ -41,9 +47,8 @@ public class ItemFetchingService {
             });
         }
 
-        List<Item> items = fetchItemsFromUrls(itemUrls);
+        fetchItemsFromUrls(itemUrls);
 
-        return items;
     }
 
     public List<String> findCollectionUrls() throws IOException {
@@ -69,7 +74,7 @@ public class ItemFetchingService {
         return skinUrls;
     }
 
-    private List<Item> fetchItemsFromUrls(List<String> itemUrls) throws IOException {
+    private void fetchItemsFromUrls(List<String> itemUrls) throws IOException {
         ArrayList<Item> items = new ArrayList<>();
         for (String itemUrl : itemUrls) {
             Document doc = Jsoup.connect(itemUrl).get();
@@ -80,14 +85,25 @@ public class ItemFetchingService {
             String imgUrl = doc.select("img.img-responsive.center-block.main-skin-img.margin-top-sm.margin-bot-sm").attr("src");
             String collection = doc.select("p.collection-text-label").text();
             System.out.println("coll!: " + collection);
+            String minWear = doc.select("div.wear-min-value").attr("data-wearMin");
+            String maxWear = doc.select("div.wear-max-value").attr("data-wearMax");
+            System.out.println("min: " + minWear + " max: " + maxWear);
             byte[] img = downloadUrl(new URL(imgUrl));
             Item newItem = new Item(weapon, design, collection, getGrade(grade), downloadUrl(new URL(imgUrl)));
+            newItem.setMinWear(Double.parseDouble(minWear));
+            newItem.setMaxWear(Double.parseDouble(maxWear));
+            
             System.out.println("loaded: " + newItem.toString());
+            try {
+                this.itemDao.create(newItem);
+            } catch (SQLException ex) {
+                Logger.getLogger(ItemFetchingService.class.getName()).log(Level.SEVERE, null, ex);
+            }
             items.add(newItem);
 
         }
 
-        return items;
+//        return items;
     }
 
     private int getGrade(String grade) {
