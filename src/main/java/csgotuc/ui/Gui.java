@@ -118,7 +118,7 @@ public class Gui extends Application {
         //EventHandlers for ListCells
         ListView<Item> inputListView = new ListView<>();
         ObservableList<Item> testItems = FXCollections.observableArrayList();
-        itemService.getAll().forEach(item -> testItems.add(item));
+        itemService.getPossibleInputs().forEach(item -> testItems.add(item));
 
         EventHandler<MouseEvent> mouseEnteredHandler = new EventHandler<MouseEvent>() {
             @Override
@@ -243,59 +243,60 @@ public class Gui extends Application {
     }
 
     public void formInputLoadout(TilePane tilePane) {
+
         List<Item> input = this.itemService.getInput();
         for (int i = 0; i < input.size(); i++) {
             int curIndex = i;
             Item curItem = input.get(i);
-            Group newGroup = new Group(new Rectangle(100, 100, Color.DARKSEAGREEN));
-            Image image = null;
-            try {
-                image = new Image(new FileInputStream("./reference_item.png"));
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            ImageView img = new ImageView(image);
-            img.setFitHeight(100);
-            img.setFitWidth(100);
-            img.setPreserveRatio(true);
-            double actWidth = img.getBoundsInLocal().getWidth();
-            double actHeight = img.getBoundsInLocal().getHeight();
-            double xAlignment = newGroup.getLayoutX() + ((100 - actWidth) / 2);
-            double yAlignment = newGroup.getLayoutY() + ((100 - actHeight) / 2);
-            newGroup.getChildren().add(img);
-            newGroup.getChildren().get(1).relocate(xAlignment, yAlignment);
-            // create a menu 
-            ContextMenu contextMenu = new ContextMenu();
 
-            // create menuitems 
-            MenuItem remove = new MenuItem("Remove");
-            remove.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    System.out.println("REMOVE:" + curItem.getName());
-                    int tileIndex;
-                    itemService.removeFromInput(curItem);
-                    System.out.println("input size: " + itemService.getInput().size());
-                    Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
-                    tilePane.getChildren().remove(curIndex);
-                    tilePane.getChildren().add(curIndex, itemGroup);
-                    try {
-                        formChart();
-                        pieChart.setData(pieChartData);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
+            if (this.itemService.getInputItem(i) != null) {
+                Group newGroup = new Group(new Rectangle(100, 100, Color.DARKSEAGREEN));
+                Image image = null;
+                try {
+                    image = new Image(new FileInputStream("./reference_item.png"));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            });
-            // add menu items to menu 
-            contextMenu.getItems().add(remove);
+                ImageView img = new ImageView(image);
+                img.setFitHeight(100);
+                img.setFitWidth(100);
+                img.setPreserveRatio(true);
+                double actWidth = img.getBoundsInLocal().getWidth();
+                double actHeight = img.getBoundsInLocal().getHeight();
+                double xAlignment = newGroup.getLayoutX() + ((100 - actWidth) / 2);
+                double yAlignment = newGroup.getLayoutY() + ((100 - actHeight) / 2);
+                newGroup.getChildren().add(img);
+                newGroup.getChildren().get(1).relocate(xAlignment, yAlignment);
+                // create a menu 
+                ContextMenu contextMenu = new ContextMenu();
 
-            newGroup.setOnContextMenuRequested(e -> contextMenu.show(newGroup, e.getScreenX(), e.getScreenY()));
+                // create menuitems 
+                MenuItem remove = new MenuItem("Remove");
+                remove.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("REMOVE:" + curItem.getName());
+                        itemService.removeFromInput(curIndex);
+                        System.out.println("input size: " + itemService.getInput().size());
+                        Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
+                        tilePane.getChildren().remove(curIndex);
+                        tilePane.getChildren().add(curIndex, itemGroup);
+                        try {
+                            formChart();
+                            pieChart.setData(pieChartData);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+                // add menu items to menu 
+                contextMenu.getItems().add(remove);
 
-            tilePane.getChildren().set(i, newGroup);
+                newGroup.setOnContextMenuRequested(e -> contextMenu.show(newGroup, e.getScreenX(), e.getScreenY()));
 
-            //Context menu
+                tilePane.getChildren().set(i, newGroup);
+            }
+
         }
     }
 

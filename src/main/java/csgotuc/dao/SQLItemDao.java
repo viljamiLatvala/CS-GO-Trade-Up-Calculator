@@ -130,4 +130,26 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         return fetchedItems;
     }
 
+    @Override
+    public List<Item> getPossibleInputs() throws SQLException {
+        List<Item> fetchedItems = new ArrayList<>();
+
+        Connection connection = database.getConnection();
+
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade < ?");
+        stmt.setInt(1, 5);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+            fetchedItems.add(fetchedItem);
+        }
+
+        stmt.close();
+        rs.close();
+        connection.close();
+
+        return fetchedItems;
+    }
+
 }
