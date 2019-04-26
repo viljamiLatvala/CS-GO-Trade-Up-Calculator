@@ -106,17 +106,6 @@ public class Item {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.name);
-        hash = 23 * hash + Objects.hashCode(this.design);
-        hash = 23 * hash + Objects.hashCode(this.weapon);
-        hash = 23 * hash + Objects.hashCode(this.collection);
-        hash = 23 * hash + Objects.hashCode(this.grade);
-        return hash;
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
