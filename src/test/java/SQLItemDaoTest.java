@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -28,15 +29,19 @@ import static org.junit.Assert.*;
 public class SQLItemDaoTest {
 
     ItemDao itemDao;
+    int startSize;
+    Random random;
 
     public SQLItemDaoTest() {
 
     }
 
     @Before
-    public void setUp() throws ClassNotFoundException {
+    public void setUp() throws ClassNotFoundException, SQLException {
         Database db = new Database("jdbc:sqlite:test_database.db");
         itemDao = new SQLItemDao(db);
+        startSize = itemDao.getAll().size();
+        random = new Random();
     }
 
     @After
@@ -46,26 +51,22 @@ public class SQLItemDaoTest {
     @Test
     public void getAllReturnsAllItems() throws SQLException {
         List<Item> list = itemDao.getAll();
-        assertEquals(42, list.size());
+        assertEquals(startSize, list.size());
     }
     
     @Test
     public void createItemWorks() throws SQLException {
         List<Item> list = itemDao.getAll();
-        assertEquals(42, list.size());
-        Item item = new Item("dummy", "design", "rare", 5, null);
+        assertEquals(startSize, list.size());
+        String name = "dummy" + this.random.nextInt();
+        String design = "dummy" + this.random.nextInt();
+        String collection = "dummy" + this.random.nextInt();
+        int grade = this.random.nextInt() + 9;
+        Item item = new Item(name, design, collection, grade, null);
         itemDao.create(item);
         list = itemDao.getAll();
-        assertEquals(43, list.size());
-    }
-    
-    @Test
-    public void getPossibleInputsWorks() throws SQLException {
-        List<Item> list = itemDao.getPossibleInputs();
-        assertEquals(42, list.size());
-        Item item = new Item("dummy", "design", "rare", 5, null);
-        list = itemDao.getPossibleInputs();
-        assertEquals(42, list.size());
+        assertEquals(startSize + 1, list.size());
+        this.startSize ++;
     }
 
     @Test
