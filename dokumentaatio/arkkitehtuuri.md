@@ -10,8 +10,14 @@ Sovelluksen käyttöliittymä toteutetaan yhtenä Scene-oliona, ja se koostuu ko
 
 Työssä käyttölittymä on pyritty eristämään mahdollisimman tehokkaasti sovelluslogiikasta siten, että käyttöliittymäluokka csgotuc.ui.Gui kutsuu sovelluslogiikkaolio ItemServicen metodeja.
 
-## Luokkakaavio
+## Sovelluslogiikka
+Sovellus sisätää datamallin Item, joillaa kuvataan Counter-Strike: Global Offensive-pelissä esiintyviä esineitä. 
 
+Sovelluksen toiminnallisesta kokonaisuudesta vastaa käyttöliittymän luokasta ItemService luoma olio. Luokka tarjoaa käyttöliittymälle Listausta tietokantaan tallennetuista esineistä Item-olioina, sekä Trade Up-sopimusten lopputuloksia käyttöliittymästä asetettujen tuotantopanosten perusteella.
+
+ItemService käyttää ItemDao-rajapinnan toteuttavaa DAO-luokkaa esineiden hakemiseen tietokannasta.
+
+### Luokkakaavio
 ![Luokkakaavio](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/luokkakaavio.png )
 
 ## Tietojen tallentaminen
