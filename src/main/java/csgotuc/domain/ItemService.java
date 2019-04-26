@@ -16,7 +16,7 @@ import java.util.TreeMap;
 
 /**
  *
- * @author latvavil
+ * ItemService forms Trade Up-contract calculations based on its input.
  */
 public class ItemService {
 
@@ -24,6 +24,10 @@ public class ItemService {
     private SortedMap<Integer, Item> inputMap;
     private ArrayList<Integer> freeSlots;
 
+    /**
+     *
+     * @param itemDao
+     */
     public ItemService(ItemDao itemDao) {
         this.itemDao = itemDao;
         this.inputMap = new TreeMap<>();
@@ -49,12 +53,21 @@ public class ItemService {
         return item;
     }
 
+    /**
+     * Removes item from inputMap.
+     * Correspondingly frees the slot for future inputs.
+     * @param slot  Input slot number i.e. inputMap key.
+     */
     public void removeFromInput(int slot) {
         this.inputMap.remove(slot);
         this.freeSlots.add(slot);
         Collections.sort(this.freeSlots);
     }
 
+    /**
+     *Adds item given as a parameter to input
+     * @param item
+     */
     public void addToInput(Item item) {
         System.out.println(item.toString());
         if (this.inputMap.size() >= 10) {
@@ -86,6 +99,13 @@ public class ItemService {
         }
     }
 
+    /**
+     * Method for calculating possible returns of a Trade Up-contract. 
+     * @return list of possible returns on a Trade Up-contract with given input.
+     * Number of occurrences of an Item corresponds to the chance that it would be received as output from the Trade Up.
+     * 
+     * @throws SQLException
+     */
     public List<Item> calculateTradeUp() throws SQLException {
         double floatAvg = 0;
         List<Item> output = new ArrayList<>();

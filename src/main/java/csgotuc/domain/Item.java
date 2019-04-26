@@ -6,8 +6,10 @@
 package csgotuc.domain;
 
 import java.util.Objects;
+
 /**
- * This class represents a weapon design, and contains relevant variables that such item needs as well as getters and setters for them.
+ * This class represents a weapon design, and contains relevant variables that
+ * such item needs as well as getters and setters for them.
  */
 public class Item {
 
@@ -21,7 +23,14 @@ public class Item {
     private double minWear;
     private double maxWear;
 
-
+    /**
+     *
+     * @param weapon
+     * @param design
+     * @param collection
+     * @param grade
+     * @param image
+     */
     public Item(String weapon, String design, String collection, int grade, byte[] image) {
         this.name = weapon + " | " + design;
         this.weapon = weapon;
@@ -55,7 +64,6 @@ public class Item {
     public void setMaxWear(double maxWear) {
         this.maxWear = maxWear;
     }
-
 
     public String getName() {
         return name;
@@ -96,8 +104,8 @@ public class Item {
     public void setGrade(int grade) {
         this.grade = grade;
     }
-    
-        public byte[] getImage() {
+
+    public byte[] getImage() {
         return image;
     }
 
@@ -139,7 +147,5 @@ public class Item {
     public String toString() {
         return "Item{" + "name=" + name + ", collection=" + collection + ", grade=" + grade + '}';
     }
-   
-    
-    
+
 }
