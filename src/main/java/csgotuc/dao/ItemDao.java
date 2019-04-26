@@ -19,10 +19,15 @@ import java.util.*;
 public interface ItemDao<Item, Integer> {
 
     void create(Item item) throws SQLException;
+
     List<Item> getAll() throws SQLException;
-     List<Item> getPossibleInputs() throws SQLException;
+
+    List<Item> getPossibleInputs() throws SQLException;
+
     List<Item> getChildren(Item inputItem) throws SQLException;
+
     Item findById(Integer key) throws SQLException;
+
     List<Item> getByGrade(int grade) throws SQLException;
-    
+
 }

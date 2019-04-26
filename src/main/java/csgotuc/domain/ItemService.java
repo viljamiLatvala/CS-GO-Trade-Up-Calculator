@@ -97,7 +97,7 @@ public class ItemService {
         }
         floatAvg /= inputMap.values().size();
         for (Item item : output) {
-            item.setFloatValue((item.getMaxWear()-item.getMinWear())*floatAvg+item.getMaxWear());
+            item.setFloatValue((item.getMaxWear() - item.getMinWear()) * floatAvg + item.getMaxWear());
             System.out.println(item.toString() + ", float: " + item.getFloatValue());
         }
         System.out.println("");
