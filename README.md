@@ -17,7 +17,8 @@ Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niide
 
 ## Releaset
 [Viikko 5](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/viikko5)
-[Viikko 6](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/viikko6)
+
+[Viikko 6](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/Viikko6)
 
 ## Komentorivitoiminnot
 
