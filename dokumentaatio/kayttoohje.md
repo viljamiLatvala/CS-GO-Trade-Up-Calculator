@@ -7,7 +7,7 @@ Lataa release tiedostot: [Viikon 6 deadline-release](https://github.com/viljamiL
 Ohjelma käynnistetään komennolla 
 
 ```
-java -jar *pakkauksen nimi*.jar
+java -jar CSGOTradeUpCalculator.jar
 ```
 
 Varmista että jar-pakkauksen kanssa samassa kansiossa sijaitsee tiedostot database.db sekä reference_item.png
