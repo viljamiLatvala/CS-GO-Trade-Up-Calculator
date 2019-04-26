@@ -9,4 +9,4 @@
 | 16.4. | 11h | JSoup-parsimisen opettelua, SQL-tietokannan muodostamista verkosta parsituista tiedoista, Testien muuttamista yhteensopiviksi SQL-tietokannan kanssa. Dokumentaation päivittäminen sekvenssikaaviolla |
 | 25.4. | 9.5h | Käyttöliittymäelementtien toiminnan harjoittelua, Käyttöliittymän graafisuuden parantamista, bugikorjauksia, koodin siistimistä, esineen kuluneisuuden laskennan toiminnallisuus toteutettu |
 | 26.4. | 4h | Käyttöohjeiden kirjoittelua, testien parantelua, dokumentaation täydentämistä, uuden GitHub releasen tekeminen |
-Yhteensä: 38h
+|Yhteensä | 38h |
