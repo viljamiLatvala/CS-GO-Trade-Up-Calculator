@@ -7,6 +7,8 @@ Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niide
 ## Dokumentaatio
 [Vaatimusmäärittely](../master/dokumentaatio/vaatimusmaarittely.md)
 
+[Käyttöohje](../master/dokumentaatio/kayttoohje.md)
+
 [Esitietoa](../master/dokumentaatio/esitietoa.md)
 
 [Arkkitehtuurikuvaus](../master/dokumentaatio/arkkitehtuuri.md)
