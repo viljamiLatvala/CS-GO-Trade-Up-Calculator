@@ -6,7 +6,9 @@
 package csgotuc.domain;
 
 import java.util.Objects;
-
+/**
+ * This class represents a weaphon design, and contains relevant variables that such item needs as well as getters and setters for them.
+ */
 public class Item {
 
     private String name;
