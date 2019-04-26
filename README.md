@@ -34,6 +34,14 @@ Testikattavuusraportti luodaan komennolla
 mvn jacoco:report
 ```
 
+### Jar-pakkaukasen luominen
+
+Jar-pakkaus luodaan komennolla
+
+```
+mvn jacoco:package
+```
+
 Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto _target/site/jacoco/index.html_
 
 ### Checkstyle
