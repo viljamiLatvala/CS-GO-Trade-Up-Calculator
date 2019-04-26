@@ -7,7 +7,6 @@ package csgotuc.ui;
 
 import csgotuc.dao.Database;
 import csgotuc.dao.ItemDao;
-import csgotuc.dao.ItemFetchingService;
 import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
@@ -71,13 +70,8 @@ public class Gui extends Application {
             }
             Database db = new Database("jdbc:sqlite:database.db");
             ItemDao itemDao = new SQLItemDao(db);
-            if (itemDao.getAll().isEmpty()) {
-                ItemFetchingService itemFetchingService = new ItemFetchingService(itemDao);
-                itemFetchingService.fetchAllItems();
-            }
-
             itemService = new ItemService(itemDao);
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
 
