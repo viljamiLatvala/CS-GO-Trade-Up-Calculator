@@ -1,6 +1,6 @@
 # Käyttöohje
 
-Lataa tiedosto *Linkki releaseen*
+Lataa release tiedostot: [Viikon 6 deadline-release](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/Viikko6)
 
 ## Ohjelman käynnistäminen
 
@@ -9,6 +9,8 @@ Ohjelma käynnistetään komennolla
 ```
 java -jar *pakkauksen nimi*.jar
 ```
+
+Varmista että jar-pakkauksen kanssa samassa kansiossa sijaitsee tiedostot database.db sekä reference_item.png
 
 ## Näkymä
 Sovelluksen käynnistyessä luodaan käyttäjälle seuraavanlainen näkymä:
