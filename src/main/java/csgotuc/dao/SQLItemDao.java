@@ -55,7 +55,8 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
     /**
      * Method to get one item with specific id from the database.
-     * @param key   desired id
+     *
+     * @param key desired id
      * @return Item with corresponding id.
      * @throws SQLException
      */
@@ -72,7 +73,32 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         }
 
         Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+        fetchedItem.setMinWear(rs.getDouble("minwear"));
+        fetchedItem.setMaxWear(rs.getDouble("maxwear"));
+        
+        stmt.close();
+        rs.close();
+        connection.close();
 
+        return (Item) fetchedItem;
+    }
+
+    @Override
+    public Item findByName(String name) throws SQLException {
+        Connection connection = database.getConnection();
+
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE name = ?");
+        stmt.setString(1, name);
+        ResultSet rs = stmt.executeQuery();
+
+        if (!rs.next()) {
+            return null;
+        }
+
+        Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+        fetchedItem.setMinWear(rs.getDouble("minwear"));
+        fetchedItem.setMaxWear(rs.getDouble("maxwear"));
+        
         stmt.close();
         rs.close();
         connection.close();
@@ -82,6 +108,7 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
     /**
      * Method for getting all items in the database
+     *
      * @return list of all items in the database.
      * @throws SQLException
      */
@@ -96,6 +123,8 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
         while (rs.next()) {
             Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+            fetchedItem.setMinWear(rs.getDouble("minwear"));
+            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
             fetchedItems.add(fetchedItem);
         }
 
@@ -107,9 +136,12 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     }
 
     /**
-     * Method looks for items frome the same collection as the input item, but with one grade higher rarity.
+     * Method looks for items frome the same collection as the input item, but
+     * with one grade higher rarity.
+     *
      * @param inputItem
-     * @return List of items with grade one level higher than that of the input item.
+     * @return List of items with grade one level higher than that of the input
+     * item.
      * @throws SQLException
      */
     @Override
@@ -127,6 +159,8 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
         while (rs.next()) {
             Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+            fetchedItem.setMinWear(rs.getDouble("minwear"));
+            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
             fetchedItems.add(fetchedItem);
         }
 
@@ -138,6 +172,7 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
     /**
      * Returns all items that have a matching grade to the parameter.
+     *
      * @param grade desired grade of returned items
      * @return
      * @throws SQLException
@@ -154,6 +189,8 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
         while (rs.next()) {
             Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+            fetchedItem.setMinWear(rs.getDouble("minwear"));
+            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
             fetchedItems.add(fetchedItem);
         }
 
@@ -165,8 +202,10 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     }
 
     /**
-     * Method used to get a list of items that are suitable for a Trade Up-contract.
-     * This method is used instead of the getAll()-method to avoid getting Items that have no child-items.
+     * Method used to get a list of items that are suitable for a Trade
+     * Up-contract. This method is used instead of the getAll()-method to avoid
+     * getting Items that have no child-items.
+     *
      * @return
      * @throws SQLException
      */
@@ -182,6 +221,8 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
         while (rs.next()) {
             Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
+            fetchedItem.setMinWear(rs.getDouble("minwear"));
+            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
             fetchedItems.add(fetchedItem);
         }
 

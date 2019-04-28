@@ -41,6 +41,18 @@ public class Item {
         this.floatValue = 0;
     }
 
+    public Item(Item item) {
+        this.name = item.getName();
+        this.design = item.getDesign();
+        this.weapon = item.getWeapon();
+        this.collection = item.getCollection();
+        this.floatValue = item.getFloatValue();
+        this.grade = item.getGrade();
+        this.image = item.getImage();
+        this.minWear = item.getMaxWear();
+        this.maxWear = item.getMinWear();
+    }
+
     public double getFloatValue() {
         return floatValue;
     }
@@ -146,6 +158,20 @@ public class Item {
     @Override
     public String toString() {
         return "Item{" + "name=" + name + ", collection=" + collection + ", grade=" + grade + '}';
+    }
+
+    public String getCondition() {
+        double fv = this.floatValue;
+        if (fv < 0.07) {
+            return "Factory New";
+        } else if (fv < 0.15) {
+            return "Minimal Wear";
+        } else if (fv < 0.38) {
+            return "Field-Tested";
+        } else if (fv < 0.45) {
+            return "Well-Worn";
+        }
+        return "Battle-Scarred";
     }
 
 }

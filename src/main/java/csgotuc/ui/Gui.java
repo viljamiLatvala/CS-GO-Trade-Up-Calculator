@@ -17,9 +17,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -31,11 +33,17 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -58,7 +66,9 @@ public class Gui extends Application {
     private ItemService itemService;
     private ObservableList<PieChart.Data> pieChartData;
     private ImageView itemPreview;
+    private Group previewGroup;
     private PieChart pieChart;
+    private AnchorPane rootPane;
 
     @Override
     public void init() {
@@ -81,8 +91,9 @@ public class Gui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws SQLException {
+        this.previewGroup = new Group();
         this.itemPreview = new ImageView();
-        AnchorPane rootPane = new AnchorPane();
+        rootPane = new AnchorPane();
 
         TilePane tilePane = new TilePane();
         tilePane.setVgap(4);
@@ -104,22 +115,27 @@ public class Gui extends Application {
             Item item = (Item) ((ListCell) clickedObject).getItem();
             ByteArrayInputStream input = new ByteArrayInputStream(item.getImage());
             Image image = new Image(input);
-            itemPreview.setImage(image);
-            itemPreview.setX(e.getSceneX());
-            itemPreview.setY(e.getSceneY());
-            itemPreview.setFitHeight(100);
-            itemPreview.setPreserveRatio(true);
+//            itemPreview.setImage(image);
+//            itemPreview.setX(e.getSceneX());
+//            itemPreview.setY(e.getSceneY());
+//            itemPreview.setFitHeight(100);
+//            itemPreview.setPreserveRatio(true);
+            formPreview(image, Arrays.asList(item.getName()));
+            previewGroup.setLayoutX(e.getSceneX() + 5);
+            previewGroup.setLayoutY(e.getSceneY() + 5);
+            rootPane.getChildren().add(previewGroup);
         };
 
         EventHandler<MouseEvent> mouseExitedHandler = (MouseEvent e) -> {
             itemPreview.setImage(null);
+            rootPane.getChildren().remove(previewGroup);
         };
 
         EventHandler<MouseEvent> mouseClickedHandler = (MouseEvent e) -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
                 Object clickedObject = e.getSource();
                 Item item = (Item) ((ListCell) clickedObject).getItem();
-                itemService.addToInput(item);
+                itemService.addToInput(new Item(item));
 
                 formInputLoadout(tilePane);
                 if (itemService.getInput().size() == 1) {
@@ -168,7 +184,6 @@ public class Gui extends Application {
 
         rootPane.getChildren().add(hbox);
         rootPane.getChildren().add(itemPreview);
-
         primaryStage.setScene(new Scene(rootPane));
         primaryStage.setTitle("CSGO Trade-Up Calculator");
         primaryStage.show();
@@ -198,18 +213,40 @@ public class Gui extends Application {
         outcomeDist.keySet().forEach((item) -> {
             pieChartData.add(new PieChart.Data(item.getName(), outcomeDist.get(item)));
         });
-        
+
         pieChart.setData(pieChartData);
-        
+
         for (PieChart.Data data : pieChart.getData()) {
-            data.getNode().setOnMouseEntered(new EventHandler<MouseEvent>()
-                    {
-                        @Override
-                        public void handle(MouseEvent e)
-                        {
-                            System.out.println(data.getName() + ": " + (data.getPieValue()/pieChart.getData().size())*100 + "%");
-                        }
-                    });
+            data.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    try {
+                        Item item = itemService.findByName(data.getName());
+                        outcomeDist.keySet().forEach(key -> {
+                            if(key.getName().equals(data.getName())) {
+                                System.out.println("GOT: " + key.getFloatValue());
+                                item.setFloatValue(key.getFloatValue());
+                            }
+                        });
+                        ByteArrayInputStream input = new ByteArrayInputStream(item.getImage());
+                        Image image = new Image(input);
+                        String dropChance = data.getPieValue() / pieChart.getData().size() * 100 + "%";
+                        formPreview(image, Arrays.asList(item.getName(), "chance: " + dropChance, "Float Value: " + item.getFloatValue(), "Condition: " + item.getCondition()));
+                        previewGroup.setLayoutX(e.getSceneX() + 5);
+                        previewGroup.setLayoutY(e.getSceneY() + 5);
+                        rootPane.getChildren().add(previewGroup);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            data.getNode().setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    rootPane.getChildren().remove(previewGroup);
+
+                }
+            });
         }
 
     }
@@ -225,7 +262,7 @@ public class Gui extends Application {
             int curIndex = i;
             Item inputItem = this.itemService.getInputItem(i);
 
-            if ( inputItem == null) {
+            if (inputItem == null) {
                 continue;
             }
             Group newGroup = new Group(new Rectangle(100, 100, Color.DARKSEAGREEN));
@@ -256,7 +293,32 @@ public class Gui extends Application {
                     Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
+
+            MenuItem floatValue = new MenuItem("Set float value");
+            floatValue.setOnAction((ActionEvent event) -> {
+                Item item = itemService.getInputItem(curIndex);
+                TextInputDialog setFloat = new TextInputDialog(Double.toString(item.getFloatValue()));
+                setFloat.setTitle("Enter new float value");
+                setFloat.setHeaderText(null);
+                Optional<String> result = setFloat.showAndWait();
+
+                result.ifPresent(newFloat -> {
+                    try {
+                        item.setFloatValue(Double.parseDouble(newFloat));
+                        try {
+                            formChart();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } catch(NumberFormatException e) {
+                        Alert alert = new Alert(AlertType.WARNING, "Input must be parseable to a Double", ButtonType.OK);
+                        alert.show();
+                    }
+                    
+                });
+            });
             contextMenu.getItems().add(remove);
+            contextMenu.getItems().add(floatValue);
             newGroup.setOnContextMenuRequested(e -> contextMenu.show(newGroup, e.getScreenX(), e.getScreenY()));
             tilePane.getChildren().set(i, newGroup);
 
@@ -273,6 +335,37 @@ public class Gui extends Application {
         ObservableList<Item> newListItems = FXCollections.observableArrayList();
         itemService.getByGrade(grade).forEach(item -> newListItems.add(item));
         list.getItems().setAll(newListItems);
+    }
+
+    public void formPreview(Image image, List<String> labels) {
+        Group newPreviewGroup = new Group();
+
+        Rectangle backdrop = new Rectangle(220, 240, Color.GRAY);
+        newPreviewGroup.getChildren().add(backdrop);
+
+        ImageView previewImageView = new ImageView(image);
+        previewImageView.setFitHeight(180);
+        previewImageView.setFitWidth(180);
+        previewImageView.setPreserveRatio(true);
+        double actWidth = previewImageView.getBoundsInLocal().getWidth();
+        double actHeight = previewImageView.getBoundsInLocal().getHeight();
+        double xAlignment = newPreviewGroup.getLayoutX() + ((backdrop.getWidth() - actWidth) / 2);
+        double yAlignment = 30 + newPreviewGroup.getLayoutY() + ((backdrop.getHeight() / 2 - actHeight) / 2);
+        newPreviewGroup.getChildren().add(previewImageView);
+        newPreviewGroup.getChildren().get(1).relocate(xAlignment, yAlignment);
+
+        double labelYPos = yAlignment + 180;
+
+        for (String labelText : labels) {
+            Label newLabel = new Label(labelText);
+            newLabel.setLayoutX(newPreviewGroup.getLayoutX() + 10);
+            newLabel.setLayoutY(labelYPos);
+            labelYPos += 15;
+            newPreviewGroup.getChildren().add(newLabel);
+        }
+        backdrop.setHeight(labelYPos + 30);
+
+        previewGroup = newPreviewGroup;
     }
 
     @Override

@@ -54,6 +54,8 @@ public interface ItemDao<Item, Integer> {
      * @throws SQLException
      */
     Item findById(Integer key) throws SQLException;
+    
+    Item findByName(String name) throws SQLException;
 
     /**
      *

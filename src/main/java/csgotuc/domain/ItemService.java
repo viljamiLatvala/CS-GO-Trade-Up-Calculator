@@ -91,6 +91,10 @@ public class ItemService {
     public List<Item> getByGrade(int grade) throws SQLException {
         return this.itemDao.getByGrade(grade);
     }
+    
+    public Item findByName(String name) throws SQLException {
+        return (Item)this.itemDao.findByName(name);
+    }
 
     public void setInputWithIds(int[] ids) throws SQLException {
         List<Item> newInput = new ArrayList<>();
@@ -111,14 +115,25 @@ public class ItemService {
         List<Item> output = new ArrayList<>();
         for (Item item : this.inputMap.values()) {
             floatAvg += item.getFloatValue();
+            System.out.println("FLOAT SUM: " + floatAvg);
+            System.out.println("INPUT ITEMS: " + inputMap.size());
+            
+            System.out.println("AVG: " + floatAvg);
             for (Item outputItem : (List<Item>) itemDao.getChildren(item)) {
+                       
                 output.add(outputItem);
             }
         }
         floatAvg /= inputMap.values().size();
-        for (Item item : output) {
-            item.setFloatValue((item.getMaxWear() - item.getMinWear()) * floatAvg + item.getMaxWear());
-            System.out.println(item.toString() + ", float: " + item.getFloatValue());
+ 
+        for (Item outputItem : output) {
+            System.out.println(outputItem.toString());
+            System.out.println("Final AVG: " + floatAvg);
+            System.out.println("maxWear: " + outputItem.getMaxWear() + "minWear: " + outputItem.getMinWear());
+            double finalFloat = (outputItem.getMaxWear() - outputItem.getMinWear()) * floatAvg + outputItem.getMinWear();
+            System.out.println("FF: " + finalFloat);
+            outputItem.setFloatValue(finalFloat);
+            System.out.println(outputItem.toString() + ", float: " + outputItem.getFloatValue());
         }
         System.out.println("");
         return output;
