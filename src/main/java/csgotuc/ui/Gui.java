@@ -135,7 +135,6 @@ public class Gui extends Application {
                 } catch (SQLException ex) {
                     Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                pieChart.setData(pieChartData);
             }
         };
 
@@ -199,6 +198,19 @@ public class Gui extends Application {
         outcomeDist.keySet().forEach((item) -> {
             pieChartData.add(new PieChart.Data(item.getName(), outcomeDist.get(item)));
         });
+        
+        pieChart.setData(pieChartData);
+        
+        for (PieChart.Data data : pieChart.getData()) {
+            data.getNode().setOnMouseEntered(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent e)
+                        {
+                            System.out.println(data.getName() + ": " + (data.getPieValue()/pieChart.getData().size())*100 + "%");
+                        }
+                    });
+        }
 
     }
 
@@ -240,8 +252,6 @@ public class Gui extends Application {
                 tilePane.getChildren().add(curIndex, itemGroup);
                 try {
                     formChart();
-                    pieChart.setData(pieChartData);
-
                 } catch (SQLException ex) {
                     Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                 }
