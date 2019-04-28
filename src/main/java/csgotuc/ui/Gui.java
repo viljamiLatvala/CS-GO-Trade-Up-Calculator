@@ -7,7 +7,6 @@ package csgotuc.ui;
 
 import csgotuc.dao.Database;
 import csgotuc.dao.ItemDao;
-import csgotuc.dao.ItemFetchingService;
 import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
@@ -72,13 +71,8 @@ public class Gui extends Application {
             }
             Database db = new Database("jdbc:sqlite:database.db");
             ItemDao itemDao = new SQLItemDao(db);
-            if (itemDao.getAll().isEmpty()) {
-                ItemFetchingService itemFetchingService = new ItemFetchingService(itemDao);
-                itemFetchingService.fetchAllItems();
-            }
-
             itemService = new ItemService(itemDao);
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
 
@@ -181,6 +175,10 @@ public class Gui extends Application {
         primaryStage.show();
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     public void formChart() throws SQLException {
         pieChartData = FXCollections.observableArrayList();
 
@@ -204,6 +202,10 @@ public class Gui extends Application {
 
     }
 
+    /**
+     *
+     * @param tilePane
+     */
     public void formInputLoadout(TilePane tilePane) {
 
         List<Item> input = this.itemService.getInput();
@@ -251,6 +253,12 @@ public class Gui extends Application {
         }
     }
 
+    /**
+     *
+     * @param list
+     * @param grade
+     * @throws SQLException
+     */
     public void formInputOptionList(ListView list, int grade) throws SQLException {
         ObservableList<Item> newListItems = FXCollections.observableArrayList();
         itemService.getByGrade(grade).forEach(item -> newListItems.add(item));
@@ -261,6 +269,10 @@ public class Gui extends Application {
     public void stop() {
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }

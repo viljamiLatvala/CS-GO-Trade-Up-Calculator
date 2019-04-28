@@ -19,10 +19,19 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
     private Database database;
 
+    /**
+     *
+     * @param database
+     */
     public SQLItemDao(Database database) {
         this.database = database;
     }
 
+    /**
+     *
+     * @param item
+     * @throws SQLException
+     */
     @Override
     public void create(Item item) throws SQLException {
         Connection connection = database.getConnection();
@@ -44,6 +53,12 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         connection.close();
     }
 
+    /**
+     * Method to get one item with specific id from the database.
+     * @param key   desired id
+     * @return Item with corresponding id.
+     * @throws SQLException
+     */
     @Override
     public Item findById(Integer key) throws SQLException {
         Connection connection = database.getConnection();
@@ -65,6 +80,11 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         return (Item) fetchedItem;
     }
 
+    /**
+     * Method for getting all items in the database
+     * @return list of all items in the database.
+     * @throws SQLException
+     */
     @Override
     public List<Item> getAll() throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();
@@ -86,6 +106,12 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         return fetchedItems;
     }
 
+    /**
+     * Method looks for items frome the same collection as the input item, but with one grade higher rarity.
+     * @param inputItem
+     * @return List of items with grade one level higher than that of the input item.
+     * @throws SQLException
+     */
     @Override
     public List<Item> getChildren(Item inputItem) throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();
@@ -110,6 +136,12 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         return fetchedItems;
     }
 
+    /**
+     * Returns all items that have a matching grade to the parameter.
+     * @param grade desired grade of returned items
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Item> getByGrade(int grade) throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();
@@ -132,6 +164,12 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         return fetchedItems;
     }
 
+    /**
+     * Method used to get a list of items that are suitable for a Trade Up-contract.
+     * This method is used instead of the getAll()-method to avoid getting Items that have no child-items.
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Item> getPossibleInputs() throws SQLException {
         List<Item> fetchedItems = new ArrayList<>();

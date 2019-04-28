@@ -7,6 +7,8 @@ Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niide
 ## Dokumentaatio
 [Vaatimusmäärittely](../master/dokumentaatio/vaatimusmaarittely.md)
 
+[Käyttöohje](../master/dokumentaatio/kayttoohje.md)
+
 [Esitietoa](../master/dokumentaatio/esitietoa.md)
 
 [Arkkitehtuurikuvaus](../master/dokumentaatio/arkkitehtuuri.md)
@@ -15,6 +17,8 @@ Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niide
 
 ## Releaset
 [Viikko 5](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/viikko5)
+
+[Viikko 6](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/Viikko6)
 
 ## Komentorivitoiminnot
 
@@ -31,8 +35,15 @@ Testikattavuusraportti luodaan komennolla
 ```
 mvn jacoco:report
 ```
-
 Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto _target/site/jacoco/index.html_
+
+### Jar-pakkaukasen luominen
+
+Jar-pakkaus luodaan komennolla
+
+```
+mvn jacoco:package
+```
 
 ### Checkstyle
 

@@ -12,17 +12,55 @@ import java.util.*;
 
 /**
  *
- * @author latvavil
+ * Interface for DAO-classes
  * @param <Item>
  * @param <Integer>
  */
 public interface ItemDao<Item, Integer> {
 
+    /**
+     *
+     * @param item
+     * @throws SQLException
+     */
     void create(Item item) throws SQLException;
+
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
     List<Item> getAll() throws SQLException;
-     List<Item> getPossibleInputs() throws SQLException;
+
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    List<Item> getPossibleInputs() throws SQLException;
+
+    /**
+     *
+     * @param inputItem
+     * @return
+     * @throws SQLException
+     */
     List<Item> getChildren(Item inputItem) throws SQLException;
+
+    /**
+     *
+     * @param key
+     * @return
+     * @throws SQLException
+     */
     Item findById(Integer key) throws SQLException;
+
+    /**
+     *
+     * @param grade
+     * @return
+     * @throws SQLException
+     */
     List<Item> getByGrade(int grade) throws SQLException;
-    
+
 }
