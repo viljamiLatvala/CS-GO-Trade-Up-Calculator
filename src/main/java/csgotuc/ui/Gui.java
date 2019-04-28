@@ -11,6 +11,7 @@ import csgotuc.dao.ItemFetchingService;
 import csgotuc.dao.SQLItemDao;
 import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -106,18 +107,14 @@ public class Gui extends Application {
 
         EventHandler<MouseEvent> mouseEnteredHandler = (MouseEvent e) -> {
             Object clickedObject = e.getSource();
-            try {
-                //Image to be replaced
-                Image image = new Image(new FileInputStream("./reference_item.png"));
-                itemPreview.setImage(image);
-                itemPreview.setX(e.getSceneX());
-                itemPreview.setY(e.getSceneY());
-                itemPreview.setFitHeight(100);
-                itemPreview.setPreserveRatio(true);
-
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Item item = (Item) ((ListCell) clickedObject).getItem();
+            ByteArrayInputStream input = new ByteArrayInputStream(item.getImage());
+            Image image = new Image(input);
+            itemPreview.setImage(image);
+            itemPreview.setX(e.getSceneX());
+            itemPreview.setY(e.getSceneY());
+            itemPreview.setFitHeight(100);
+            itemPreview.setPreserveRatio(true);
         };
 
         EventHandler<MouseEvent> mouseExitedHandler = (MouseEvent e) -> {
@@ -212,17 +209,14 @@ public class Gui extends Application {
         List<Item> input = this.itemService.getInput();
         for (int i = 0; i < input.size(); i++) {
             int curIndex = i;
+            Item inputItem = this.itemService.getInputItem(i);
 
-            if (this.itemService.getInputItem(i) == null) {
+            if ( inputItem == null) {
                 continue;
             }
             Group newGroup = new Group(new Rectangle(100, 100, Color.DARKSEAGREEN));
             Image image = null;
-            try {
-                image = new Image(new FileInputStream("./reference_item.png"));
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            image = new Image(new ByteArrayInputStream(inputItem.getImage()));
             ImageView img = new ImageView(image);
             img.setFitHeight(100);
             img.setFitWidth(100);
