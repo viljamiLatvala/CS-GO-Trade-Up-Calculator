@@ -10,4 +10,4 @@
 | 25.4. | 9.5h | Käyttöliittymäelementtien toiminnan harjoittelua, Käyttöliittymän graafisuuden parantamista, bugikorjauksia, koodin siistimistä, esineen kuluneisuuden laskennan toiminnallisuus toteutettu |
 | 26.4. | 4h | Käyttöohjeiden kirjoittelua, testien parantelua, dokumentaation täydentämistä, uuden GitHub releasen tekeminen |
 | 28.4. | 1.5h | Kuvien lataaminen tietokannasta, perustoiminnallisuus tarkempien tietojen katselemiseksi piirakkadiagrammista |
-|Yhteensä | 38h |
+|Yhteensä | 39.5h |
