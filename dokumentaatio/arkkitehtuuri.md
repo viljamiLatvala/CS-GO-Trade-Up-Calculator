@@ -46,3 +46,5 @@ CREATE TABLE Item (
 Kun käyttäjä valitsee käyttöliittymässä olevasta listasta esineen tuotantopanokseksi vaihtotapahtumaan, kutsuu käyttöliittymä ItemServicen addToInput-metodia. Tämän jälkeen käyttöliittymä muodostaa uuden piirakkadiagrammin käyttäjälle kutsumalla omaa metodiaan formChart. FormChart kutsuu jälleen ItemServiceä, joka lähettää säilyttämänsä input-esineet ItemDao:lle, joka palauttaa niitä vastaavat mahdolliset tuotantotulokset. ItemService välittää tämän listan eteenpäin käyttöliittymälle, joka piirtää kuvista piirakkadiagrammin käyttäjän nähtäväksi 
 
 _*LISÄÄ KUNTOISUUDEN LASKEMINEN*_
+
+## Sovellukseen jääneet rakenteelliset heikkoudet
