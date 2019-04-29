@@ -20,6 +20,8 @@ ItemService käyttää ItemDao-rajapinnan toteuttavaa DAO-luokkaa esineiden hake
 ### Luokkakaavio
 ![Luokkakaavio](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/luokkakaavio.png )
 
+_*PÄIVITÄ*_
+
 ## Tietojen tallentaminen
 
 Sovellus säilyttää tietoa esineissä SQL-tietokannassa. Tietokannan rakenne ilmenee seuraavasta CREATE TABLE-lauseesta:
@@ -43,4 +45,4 @@ CREATE TABLE Item (
 
 Kun käyttäjä valitsee käyttöliittymässä olevasta listasta esineen tuotantopanokseksi vaihtotapahtumaan, kutsuu käyttöliittymä ItemServicen addToInput-metodia. Tämän jälkeen käyttöliittymä muodostaa uuden piirakkadiagrammin käyttäjälle kutsumalla omaa metodiaan formChart. FormChart kutsuu jälleen ItemServiceä, joka lähettää säilyttämänsä input-esineet ItemDao:lle, joka palauttaa niitä vastaavat mahdolliset tuotantotulokset. ItemService välittää tämän listan eteenpäin käyttöliittymälle, joka piirtää kuvista piirakkadiagrammin käyttäjän nähtäväksi 
 
-*Lisää kuntoisuuden laskeminen*
+_*LISÄÄ KUNTOISUUDEN LASKEMINEN*_
