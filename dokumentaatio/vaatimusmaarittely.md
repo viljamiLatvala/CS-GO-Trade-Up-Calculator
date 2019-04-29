@@ -1,3 +1,4 @@
+
 # Vaatimusmäärittely
 ## Sovelluksen tarkoitus
 Sovelluksen avulla käyttäjän on mahdollista simuloida Counter-Strike: Global Offensive pelissä tehtäviä vaihtosopimuksia. Simuloimalla näitä vaihtosopimuksia on käyttäjän mahdollista selvittää erilaisista yhdistelmistä syntyviä lopputulosvaihtoehtoja ja niiden todennäköisyyksiä. Näin käyttäjä voi ennustaa pelissä tapahtuvien sopimusten lopputulemaa ennen kuin tekee lopullisia ratkaisuja itse pelissä.
@@ -9,10 +10,16 @@ Sovelluksessa on vain yksi käyttäjärooli, nk. "normaali käyttäjä".
 
 ## Perusversion tarjoama toiminnallisuus
 ### Input-esineiden valitseminen
-Käyttäjä voi valita listasta 10-esinettä joita käytetään vaihtokaupan tuotantopanoksena. Ohjelma pitää huolen että esineet täyttävät pelin asettamat vaatimukset niiden yhtäläisyydestä. Käyttäjä voi syöttää manuaalisesti esineiden kulutusasteen. Ohjelman käyttämään tietokantaan on parsittu www.CSGOstash.com sivustolla listatut pelissä esiintyvät esineet ja niiden sovelluksen kannalta oleelliset tiedot.
+- Käyttäjä voi valita listasta 10-esinettä joita käytetään vaihtokaupan tuotantopanoksena.
+- Ohjelma pitää huolen että esineet täyttävät pelin asettamat vaatimukset niiden yhtäläisyydestä.
+- Käyttäjä voi syöttää manuaalisesti esineiden kulutusasteen.
+- Ohjelma tarjoaa tietokannan johon on koottu pelissä esiintyvät esineet ja niiden sovelluksen kannalta oleelliset tiedot.
 
 ### Output-tulosten esittely
-Kun käyttäjä on valinnut 10 esinettä tuotantopanokseksi, laskee ohjelma näiden esineiden tuottaman tuotantotuloksen ja esittää käyttäjälle mahdolliset lopputulemat, niiden todennäköisyydet sekä esineelle lasketun kulutusasteen.
+Jokaisen lisätyn esineen jälkeen sovellus:
+- laskee näiden esineiden tuottaman tuotantotuloksen
+- esittää käyttäjälle diagrammin mahdollisista lopputulemista
+- Jokaista mahdollista lopputulema-esinettä kohden esitetään niiden todennäköisyyys sekä esineelle laskettu kulutusaste.
 
 ## Jatkokehitysideoita
 - Verkosta tietoa hakeva luokka, jolla käyttäjä voi luoda uuden, ajantasaisen tietokannan.
