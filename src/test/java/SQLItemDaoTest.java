@@ -53,7 +53,7 @@ public class SQLItemDaoTest {
         List<Item> list = itemDao.getAll();
         assertEquals(startSize, list.size());
     }
-    
+
     @Test
     public void createItemWorks() throws SQLException {
         List<Item> list = itemDao.getAll();
@@ -62,28 +62,43 @@ public class SQLItemDaoTest {
         String design = "dummy" + this.random.nextInt();
         String collection = "dummy" + this.random.nextInt();
         int grade = this.random.nextInt() + 9;
-        Item item = new Item(name, design, collection, grade, null);
+        Item item = new Item(name, collection, grade, null, 0, 0);
         itemDao.create(item);
         list = itemDao.getAll();
         assertEquals(startSize + 1, list.size());
-        this.startSize ++;
+        itemDao.delete(item);
+    }
+
+    @Test
+    public void deleteWorks() throws SQLException {
+        String name = "dummy" + this.random.nextInt();
+        String design = "dummy" + this.random.nextInt();
+        String collection = "dummy" + this.random.nextInt();
+        int grade = this.random.nextInt() + 9;
+        Item item = new Item(name, collection, grade, null, 0, 0);
+        itemDao.create(item);
+        assertEquals(startSize + 1, itemDao.getAll().size());
+        itemDao.delete(item);
+        assertEquals(startSize, itemDao.getAll().size());
+        itemDao.delete(item);
+        assertEquals(startSize, itemDao.getAll().size());
     }
 
     @Test
     public void getByIdRetunsCorrectObject() throws SQLException {
-        Item received = (Item)itemDao.findById(2);
-        assertEquals(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null), received);
+        Item received = (Item) itemDao.findById(2);
+        assertEquals(new Item("SG 553 | Integrale", "The 2018 Inferno Collection", 4, null, 0, 0), received);
     }
 
     @Test
     public void getChildrenReturnsCorrectItems() throws SQLException {
-        Item parent = (Item)itemDao.findById(4);
+        Item parent = (Item) itemDao.findById(4);
         List<Item> children = itemDao.getChildren(parent);
-        assertTrue(children.contains(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null)));
-        assertTrue(children.contains(new Item("Dual Berettas", "Twin Turbo", "The 2018 Inferno Collection", 4, null)));
+        assertTrue(children.contains(new Item("SG 553 | Integrale", "The 2018 Inferno Collection", 4, null, 0, 0)));
+        assertTrue(children.contains(new Item("Dual Berettas | Twin Turbo", "The 2018 Inferno Collection", 4, null, 0, 0)));
         assertEquals(2, children.size());
     }
-    
+
     @Test
     public void getByGradeReturnsCorrectAmount() throws SQLException {
         List<Item> list = itemDao.getByGrade(2);
@@ -92,15 +107,15 @@ public class SQLItemDaoTest {
 
     @Test
     public void itemGradeIsSetCorrectly() throws SQLException {
-        Item item = (Item)itemDao.findById(15);
+        Item item = (Item) itemDao.findById(15);
         assertTrue(item.getGrade() == 0);
-        item = (Item)itemDao.findById(11);
+        item = (Item) itemDao.findById(11);
         assertTrue(item.getGrade() == 1);
-        item = (Item)itemDao.findById(7);
+        item = (Item) itemDao.findById(7);
         assertTrue(item.getGrade() == 2);
-        item = (Item)itemDao.findById(1);
+        item = (Item) itemDao.findById(1);
         assertTrue(item.getGrade() == 3);
-        item = (Item)itemDao.findById(2);
+        item = (Item) itemDao.findById(2);
         assertTrue(item.getGrade() == 4);
     }
 

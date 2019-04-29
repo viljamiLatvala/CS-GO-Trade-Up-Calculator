@@ -75,10 +75,6 @@ public class ItemService {
 
     }
 
-    public List<Item> getAll() {
-        return this.itemDao.getAll();
-    }
-
     public List<Item> getByGrade(int grade){
         return this.itemDao.getByGrade(grade);
     }

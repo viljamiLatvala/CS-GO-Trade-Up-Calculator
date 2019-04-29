@@ -39,16 +39,31 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
             Connection connection = database.getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO Item"
-                    + " (name, weapon, design, collection, grade, minwear, maxwear, image)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    + " (name, collection, grade, minwear, maxwear, image)"
+                    + " VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setString(1, item.getName());
-            stmt.setString(2, item.getWeapon());
-            stmt.setString(3, item.getDesign());
-            stmt.setString(4, item.getCollection());
-            stmt.setInt(5, item.getGrade());
-            stmt.setDouble(6, item.getMinWear());
-            stmt.setDouble(7, item.getMaxWear());
-            stmt.setBytes(8, item.getImage());
+            stmt.setString(2, item.getCollection());
+            stmt.setInt(3, item.getGrade());
+            stmt.setDouble(4, item.getMinWear());
+            stmt.setDouble(5, item.getMaxWear());
+            stmt.setBytes(6, item.getImage());
+
+            stmt.executeUpdate();
+            stmt.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void delete(Item item) {
+        try {
+            Connection connection = database.getConnection();
+
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM Item WHERE name = ? AND collection = ?");
+            stmt.setString(1, item.getName());
+            stmt.setString(2, item.getCollection());
 
             stmt.executeUpdate();
             stmt.close();
@@ -219,10 +234,10 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
      * @return
      */
     @Override
-    public List<Item> getPossibleInputs(){
+    public List<Item> getPossibleInputs() {
         List<Item> fetchedItems = new ArrayList<>();
         try {
-            
+
             Connection connection = database.getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade < ?");
@@ -236,7 +251,7 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
             stmt.close();
             rs.close();
             connection.close();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -244,7 +259,7 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     }
 
     private Item fetchItem(ResultSet rs) throws SQLException {
-        Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"),
+        Item fetchedItem = new Item(rs.getString("name"),
                 rs.getString("collection"), rs.getInt("grade"),
                 rs.getBytes("image"), rs.getDouble("minwear"),
                 rs.getDouble("maxwear"));

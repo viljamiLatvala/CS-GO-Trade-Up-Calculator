@@ -29,11 +29,12 @@ public interface ItemDao<Item, Integer> {
      * @return
      */
     List<Item> getAll();
+    
+    void delete(Item item);
 
     /**
      *
      * @return
-     * @throws java.sql.SQLException
      */
     List<Item> getPossibleInputs();
 

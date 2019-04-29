@@ -14,8 +14,6 @@ import java.util.Objects;
 public class Item {
 
     private String name;
-    private String design;
-    private String weapon;
     private String collection;
     private double floatValue;
     private int grade;
@@ -24,17 +22,12 @@ public class Item {
     private double maxWear;
 
     /**
-     *
-     * @param weapon
-     * @param design
      * @param collection
      * @param grade
      * @param image
      */
-    public Item(String weapon, String design, String collection, int grade, byte[] image, double minWear, double maxWear) {
-        this.name = weapon + " | " + design;
-        this.weapon = weapon;
-        this.design = design;
+    public Item(String name, String collection, int grade, byte[] image, double minWear, double maxWear) {
+        this.name = name;
         this.collection = collection;
         this.grade = grade;
         this.image = image;
@@ -45,13 +38,11 @@ public class Item {
 
     public Item(Item item) {
         this.name = item.getName();
-        this.design = item.getDesign();
-        this.weapon = item.getWeapon();
         this.collection = item.getCollection();
         this.floatValue = item.getFloatValue();
         this.grade = item.getGrade();
         this.image = item.getImage();
-        
+
     }
 
     public double getFloatValue() {
@@ -72,14 +63,6 @@ public class Item {
 
     public String getName() {
         return name;
-    }
-
-    public String getDesign() {
-        return design;
-    }
-
-    public String getWeapon() {
-        return weapon;
     }
 
     public String getCollection() {
@@ -109,12 +92,6 @@ public class Item {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.design, other.design)) {
-            return false;
-        }
-        if (!Objects.equals(this.weapon, other.weapon)) {
-            return false;
-        }
         if (!Objects.equals(this.collection, other.collection)) {
             return false;
         }
@@ -126,8 +103,10 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" + "name=" + name + ", collection=" + collection + ", grade=" + grade + '}';
+        return "Item{" + "name=" + name + ", collection=" + collection + ", maxWear=" + maxWear + '}';
     }
+    
+    
 
     public String getCondition() {
         double fv = this.floatValue;

@@ -33,7 +33,7 @@ public class ItemServiceTest {
     
     @Before
     public void setUp() throws ClassNotFoundException {
-        Database db = new Database("jdbc:sqlite:database.db");
+        Database db = new Database("jdbc:sqlite:test_database.db");
         ItemDao itemDao = new SQLItemDao(db);
         itemService = new ItemService(itemDao);
     }
@@ -43,43 +43,77 @@ public class ItemServiceTest {
          assertEquals(0, this.itemService.getInput().size());
      }
      
-//    @Test
-//     public void setInputWithIdsWorks() throws SQLException {
-//         int[] ids = {2};
-//         this.itemService.setInputWithIds(ids);
-//         assertEquals(1, this.itemService.getInput().size());
-//         assertEquals(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null), this.itemService.getInput().get(0));
-//         int[] ids2 = {2,3,4};
-//         this.itemService.setInputWithIds(ids2);
-//         assertEquals(3, this.itemService.getInput().size());
-//         assertEquals(new Item("Dual Berettas", "Twin Turbo", "The 2018 Inferno Collection", 4, null), this.itemService.getInput().get(1));   
-//     }
-     
      @Test
      public void calculateTradeUpWorks1() throws SQLException {
-         int[] ids = {4};
-         this.itemService.setInputWithIds(ids);
+         this.itemService.addToInput(this.itemService.findByName("AK-47 | Safety Net"));
          List<Item> result = this.itemService.calculateTradeUp();
          assertEquals(2, result.size());
-         assertEquals(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null).toString(), result.get(0).toString());
+         assertTrue(result.contains(this.itemService.findByName("SG 553 | Integrale")));
      }
      
     @Test
     public void calculateTradeUpWorks2() throws SQLException {
-         int[] ids = {4,4,4,4};
-         this.itemService.setInputWithIds(ids);
+        for (int i = 0; i < 4; i++) {
+             this.itemService.addToInput(this.itemService.findByName("AK-47 | Safety Net"));
+        }
          List<Item> result = this.itemService.calculateTradeUp();
          assertEquals(8, result.size());
          result.forEach((item) -> {
-             assertTrue(item.equals(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null)) || item.equals(new Item("Dual Berettas", "Twin Turbo", "The 2018 Inferno Collection", 4, null)));
+             assertTrue(item.equals(this.itemService.findByName("SG 553 | Integrale")) || item.equals(this.itemService.findByName("Dual Berettas | Twin Turbo")));
         });
      }
     
     @Test
     public void addToInputWorks() {
-        Item item = new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null);
+        Item item = this.itemService.findByName("AK-47 | Safety Net");
         this.itemService.addToInput(item);
         assertTrue(this.itemService.getInput().contains(item));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void addToInputThrowsError() {
+        Item item = this.itemService.findByName("AK-47 | Safety Net");
+        for (int i = 0; i < 11; i++) {
+            this.itemService.addToInput(item);
+        }
+    }
+    
+     @Test
+    public void getByGradeReturnsCorrectAmount() {
+        List<Item> list = this.itemService.getByGrade(2);
+        assertEquals(9, list.size());
+    }
+    
+    @Test
+    public void getInputItemWorks() {
+        Item item1 = this.itemService.findByName("AK-47 | Safety Net");
+        this.itemService.addToInput(item1);
+        assertEquals(item1, this.itemService.getInputItem(0));
+        Item item2 = this.itemService.findByName("SG 553 | Integrale");
+        this.itemService.addToInput(item2);
+        assertEquals(item1, this.itemService.getInputItem(0));
+        assertEquals(item2, this.itemService.getInputItem(1));
+    }
+    
+    @Test
+    public void removeFromInputWorks() {
+        Item item1 = this.itemService.findByName("AK-47 | Safety Net");
+        this.itemService.addToInput(item1);
+        Item item2 = this.itemService.findByName("SG 553 | Integrale");
+        this.itemService.addToInput(item2);
+        Item item3 = this.itemService.findByName("P250 | Vino Primo");
+        this.itemService.addToInput(item3);
+        
+        this.itemService.removeFromInput(1);
+        assertTrue(this.itemService.getInput().size() == 2);
+        assertTrue(this.itemService.getInputItem(0) == item1);
+        assertTrue(this.itemService.getInputItem(1) == null);
+        assertTrue(this.itemService.getInputItem(2) == item3);
+    }
+    
+    @Test
+    public void getPossibleInputsWorks() {
+        assertEquals(56, this.itemService.getPossibleInputs().size());
     }
     
 //    @Test
@@ -93,9 +127,4 @@ public class ItemServiceTest {
 //            assertTrue(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null).equals(items.get(i)));
 //        }
 //    }
-    
-    @Test
-    public void getAllWorks() throws SQLException {
-        assertTrue(this.itemService.getAll().size() == 765);
-    }
 }
