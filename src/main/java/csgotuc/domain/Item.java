@@ -31,7 +31,7 @@ public class Item {
      * @param grade
      * @param image
      */
-    public Item(String weapon, String design, String collection, int grade, byte[] image) {
+    public Item(String weapon, String design, String collection, int grade, byte[] image, double minWear, double maxWear) {
         this.name = weapon + " | " + design;
         this.weapon = weapon;
         this.design = design;
@@ -39,6 +39,8 @@ public class Item {
         this.grade = grade;
         this.image = image;
         this.floatValue = 0;
+        this.minWear = minWear;
+        this.maxWear = maxWear;
     }
 
     public Item(Item item) {
@@ -49,8 +51,7 @@ public class Item {
         this.floatValue = item.getFloatValue();
         this.grade = item.getGrade();
         this.image = item.getImage();
-        this.minWear = item.getMaxWear();
-        this.maxWear = item.getMinWear();
+        
     }
 
     public double getFloatValue() {
@@ -65,64 +66,32 @@ public class Item {
         return minWear;
     }
 
-    public void setMinWear(double minWear) {
-        this.minWear = minWear;
-    }
-
     public double getMaxWear() {
         return maxWear;
-    }
-
-    public void setMaxWear(double maxWear) {
-        this.maxWear = maxWear;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDesign() {
         return design;
-    }
-
-    public void setDesign(String design) {
-        this.design = design;
     }
 
     public String getWeapon() {
         return weapon;
     }
 
-    public void setWeapon(String weapon) {
-        this.weapon = weapon;
-    }
-
     public String getCollection() {
         return collection;
-    }
-
-    public void setCollection(String collection) {
-        this.collection = collection;
     }
 
     public int getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
     public byte[] getImage() {
         return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     @Override

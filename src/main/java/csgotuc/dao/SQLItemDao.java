@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,27 +32,30 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     /**
      *
      * @param item
-     * @throws SQLException
      */
     @Override
-    public void create(Item item) throws SQLException {
-        Connection connection = database.getConnection();
+    public void create(Item item) {
+        try {
+            Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Item"
-                + " (name, weapon, design, collection, grade, minwear, maxwear, image)"
-                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        stmt.setString(1, item.getName());
-        stmt.setString(2, item.getWeapon());
-        stmt.setString(3, item.getDesign());
-        stmt.setString(4, item.getCollection());
-        stmt.setInt(5, item.getGrade());
-        stmt.setDouble(6, item.getMinWear());
-        stmt.setDouble(7, item.getMaxWear());
-        stmt.setBytes(8, item.getImage());
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO Item"
+                    + " (name, weapon, design, collection, grade, minwear, maxwear, image)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            stmt.setString(1, item.getName());
+            stmt.setString(2, item.getWeapon());
+            stmt.setString(3, item.getDesign());
+            stmt.setString(4, item.getCollection());
+            stmt.setInt(5, item.getGrade());
+            stmt.setDouble(6, item.getMinWear());
+            stmt.setDouble(7, item.getMaxWear());
+            stmt.setBytes(8, item.getImage());
 
-        stmt.executeUpdate();
-        stmt.close();
-        connection.close();
+            stmt.executeUpdate();
+            stmt.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -58,51 +63,57 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
      *
      * @param key desired id
      * @return Item with corresponding id.
-     * @throws SQLException
      */
     @Override
-    public Item findById(Integer key) throws SQLException {
-        Connection connection = database.getConnection();
+    public Item findById(Integer key) {
+        Item fetchedItem = null;
+        try {
+            Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE id = ?");
-        stmt.setInt(1, key);
-        ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE id = ?");
+            stmt.setInt(1, key);
+            ResultSet rs = stmt.executeQuery();
 
-        if (!rs.next()) {
-            return null;
+            if (!rs.next()) {
+                return null;
+            }
+
+            fetchedItem = fetchItem(rs);
+
+            stmt.close();
+            rs.close();
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
-        fetchedItem.setMinWear(rs.getDouble("minwear"));
-        fetchedItem.setMaxWear(rs.getDouble("maxwear"));
-        
-        stmt.close();
-        rs.close();
-        connection.close();
 
         return (Item) fetchedItem;
     }
 
     @Override
-    public Item findByName(String name) throws SQLException {
-        Connection connection = database.getConnection();
+    public Item findByName(String name) {
+        Item fetchedItem = null;
+        try {
+            Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE name = ?");
-        stmt.setString(1, name);
-        ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE name = ?");
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
 
-        if (!rs.next()) {
-            return null;
+            if (!rs.next()) {
+                return null;
+            }
+
+            fetchedItem = fetchItem(rs);
+
+            stmt.close();
+            rs.close();
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
-        fetchedItem.setMinWear(rs.getDouble("minwear"));
-        fetchedItem.setMaxWear(rs.getDouble("maxwear"));
-        
-        stmt.close();
-        rs.close();
-        connection.close();
-
         return (Item) fetchedItem;
     }
 
@@ -110,28 +121,27 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
      * Method for getting all items in the database
      *
      * @return list of all items in the database.
-     * @throws SQLException
      */
     @Override
-    public List<Item> getAll() throws SQLException {
+    public List<Item> getAll() {
         List<Item> fetchedItems = new ArrayList<>();
+        try {
+            Connection connection = database.getConnection();
 
-        Connection connection = database.getConnection();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item");
+            ResultSet rs = stmt.executeQuery();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item");
-        ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                fetchedItems.add(fetchItem(rs));
+            }
 
-        while (rs.next()) {
-            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
-            fetchedItem.setMinWear(rs.getDouble("minwear"));
-            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
-            fetchedItems.add(fetchedItem);
+            stmt.close();
+            rs.close();
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        stmt.close();
-        rs.close();
-        connection.close();
-
         return fetchedItems;
     }
 
@@ -142,31 +152,31 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
      * @param inputItem
      * @return List of items with grade one level higher than that of the input
      * item.
-     * @throws SQLException
      */
     @Override
-    public List<Item> getChildren(Item inputItem) throws SQLException {
+    public List<Item> getChildren(Item inputItem) {
         List<Item> fetchedItems = new ArrayList<>();
-        String collection = inputItem.getCollection();
-        int grade = inputItem.getGrade() + 1;
+        try {
+            String collection = inputItem.getCollection();
+            int desiredGrade = inputItem.getGrade() + 1;
 
-        Connection connection = database.getConnection();
+            Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE collection = ? AND grade = ?");
-        stmt.setString(1, collection);
-        stmt.setInt(2, grade);
-        ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE collection = ? AND grade = ?");
+            stmt.setString(1, collection);
+            stmt.setInt(2, desiredGrade);
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
-            fetchedItem.setMinWear(rs.getDouble("minwear"));
-            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
-            fetchedItems.add(fetchedItem);
+            while (rs.next()) {
+                fetchedItems.add(fetchItem(rs));
+            }
+
+            stmt.close();
+            rs.close();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        stmt.close();
-        rs.close();
-        connection.close();
         return fetchedItems;
     }
 
@@ -175,29 +185,29 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
      *
      * @param grade desired grade of returned items
      * @return
-     * @throws SQLException
      */
     @Override
-    public List<Item> getByGrade(int grade) throws SQLException {
+    public List<Item> getByGrade(int grade) {
         List<Item> fetchedItems = new ArrayList<>();
+        try {
 
-        Connection connection = database.getConnection();
+            Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade = ?");
-        stmt.setInt(1, grade);
-        ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade = ?");
+            stmt.setInt(1, grade);
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
-            fetchedItem.setMinWear(rs.getDouble("minwear"));
-            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
-            fetchedItems.add(fetchedItem);
+            while (rs.next()) {
+                fetchedItems.add(fetchItem(rs));
+            }
+
+            stmt.close();
+            rs.close();
+            connection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        stmt.close();
-        rs.close();
-        connection.close();
-
         return fetchedItems;
     }
 
@@ -207,30 +217,39 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
      * getting Items that have no child-items.
      *
      * @return
-     * @throws SQLException
      */
     @Override
-    public List<Item> getPossibleInputs() throws SQLException {
+    public List<Item> getPossibleInputs(){
         List<Item> fetchedItems = new ArrayList<>();
+        try {
+            
+            Connection connection = database.getConnection();
 
-        Connection connection = database.getConnection();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade < ?");
+            stmt.setInt(1, 5);
+            ResultSet rs = stmt.executeQuery();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade < ?");
-        stmt.setInt(1, 5);
-        ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                fetchedItems.add(fetchItem(rs));
+            }
 
-        while (rs.next()) {
-            Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"), rs.getString("collection"), rs.getInt("grade"), rs.getBytes("image"));
-            fetchedItem.setMinWear(rs.getDouble("minwear"));
-            fetchedItem.setMaxWear(rs.getDouble("maxwear"));
-            fetchedItems.add(fetchedItem);
+            stmt.close();
+            rs.close();
+            connection.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        stmt.close();
-        rs.close();
-        connection.close();
-
         return fetchedItems;
+    }
+
+    private Item fetchItem(ResultSet rs) throws SQLException {
+        Item fetchedItem = new Item(rs.getString("weapon"), rs.getString("design"),
+                rs.getString("collection"), rs.getInt("grade"),
+                rs.getBytes("image"), rs.getDouble("minwear"),
+                rs.getDouble("maxwear"));
+
+        return fetchedItem;
     }
 
 }

@@ -12,8 +12,6 @@ import csgotuc.domain.Item;
 import csgotuc.domain.ItemService;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -37,12 +35,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,7 +50,6 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javax.swing.text.html.HTML;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -65,7 +60,6 @@ public class Gui extends Application {
 
     private ItemService itemService;
     private ObservableList<PieChart.Data> pieChartData;
-    private ImageView itemPreview;
     private Group previewGroup;
     private PieChart pieChart;
     private AnchorPane rootPane;
@@ -92,12 +86,9 @@ public class Gui extends Application {
     @Override
     public void start(Stage primaryStage) throws SQLException {
         this.previewGroup = new Group();
-        this.itemPreview = new ImageView();
         rootPane = new AnchorPane();
 
-        TilePane tilePane = new TilePane();
-        tilePane.setVgap(4);
-        tilePane.setHgap(4);
+        TilePane tilePane = new TilePane(4, 4);
         tilePane.setPrefColumns(4);
         for (int i = 0; i < 10; i++) {
             Group itemGroup = new Group(new Rectangle(100, 100, Color.GRAY));
@@ -107,27 +98,17 @@ public class Gui extends Application {
         pieChart = new PieChart();
 
         ListView<Item> inputListView = new ListView<>();
-        ObservableList<Item> testItems = FXCollections.observableArrayList();
-        itemService.getPossibleInputs().forEach(item -> testItems.add(item));
+        ObservableList<Item> inputItems = FXCollections.observableArrayList(itemService.getPossibleInputs());
 
         EventHandler<MouseEvent> mouseEnteredHandler = (MouseEvent e) -> {
             Object clickedObject = e.getSource();
             Item item = (Item) ((ListCell) clickedObject).getItem();
-            ByteArrayInputStream input = new ByteArrayInputStream(item.getImage());
-            Image image = new Image(input);
-//            itemPreview.setImage(image);
-//            itemPreview.setX(e.getSceneX());
-//            itemPreview.setY(e.getSceneY());
-//            itemPreview.setFitHeight(100);
-//            itemPreview.setPreserveRatio(true);
-            formPreview(image, Arrays.asList(item.getName()));
-            previewGroup.setLayoutX(e.getSceneX() + 5);
-            previewGroup.setLayoutY(e.getSceneY() + 5);
+            formPreview(item.getImage(), Arrays.asList(item.getName()));
+            previewGroup.relocate(e.getSceneX() + 10, e.getSceneY() + 10);
             rootPane.getChildren().add(previewGroup);
         };
 
         EventHandler<MouseEvent> mouseExitedHandler = (MouseEvent e) -> {
-            itemPreview.setImage(null);
             rootPane.getChildren().remove(previewGroup);
         };
 
@@ -135,15 +116,14 @@ public class Gui extends Application {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
                 Object clickedObject = e.getSource();
                 Item item = (Item) ((ListCell) clickedObject).getItem();
-                itemService.addToInput(new Item(item));
+                if(itemService.getInput().size()<10) {
+                    itemService.addToInput(new Item(item));
+                }
+                
 
                 formInputLoadout(tilePane);
                 if (itemService.getInput().size() == 1) {
-                    try {
-                        formInputOptionList(inputListView, item.getGrade());
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    formInputOptionList(inputListView, item.getGrade());
                 }
 
                 try {
@@ -173,7 +153,7 @@ public class Gui extends Application {
             };
         }
         );
-        inputListView.setItems(testItems);
+        inputListView.setItems(inputItems);
 
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10));
@@ -183,7 +163,6 @@ public class Gui extends Application {
         hbox.getChildren().add(pieChart);
 
         rootPane.getChildren().add(hbox);
-        rootPane.getChildren().add(itemPreview);
         primaryStage.setScene(new Scene(rootPane));
         primaryStage.setTitle("CSGO Trade-Up Calculator");
         primaryStage.show();
@@ -217,35 +196,21 @@ public class Gui extends Application {
         pieChart.setData(pieChartData);
 
         for (PieChart.Data data : pieChart.getData()) {
-            data.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    try {
-                        Item item = itemService.findByName(data.getName());
-                        outcomeDist.keySet().forEach(key -> {
-                            if(key.getName().equals(data.getName())) {
-                                System.out.println("GOT: " + key.getFloatValue());
-                                item.setFloatValue(key.getFloatValue());
-                            }
-                        });
-                        ByteArrayInputStream input = new ByteArrayInputStream(item.getImage());
-                        Image image = new Image(input);
-                        String dropChance = data.getPieValue() / pieChart.getData().size() * 100 + "%";
-                        formPreview(image, Arrays.asList(item.getName(), "chance: " + dropChance, "Float Value: " + item.getFloatValue(), "Condition: " + item.getCondition()));
-                        previewGroup.setLayoutX(e.getSceneX() + 5);
-                        previewGroup.setLayoutY(e.getSceneY() + 5);
-                        rootPane.getChildren().add(previewGroup);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            data.getNode().setOnMouseEntered((MouseEvent e) -> {
+                Item item = itemService.findByName(data.getName());
+                outcomeDist.keySet().forEach(key -> {
+                    if (key.getName().equals(data.getName())) {
+                        item.setFloatValue(key.getFloatValue());
                     }
-                }
+                });
+                String dropChance = data.getPieValue() / pieChart.getData().size() * 100 + "%";
+                formPreview(item.getImage(), Arrays.asList(item.getName(), "chance: " + dropChance, "Float Value: " + item.getFloatValue(), "Condition: " + item.getCondition()));
+                previewGroup.setLayoutX(e.getSceneX() + 5);
+                previewGroup.setLayoutY(e.getSceneY() + 5);
+                rootPane.getChildren().add(previewGroup);
             });
-            data.getNode().setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    rootPane.getChildren().remove(previewGroup);
-
-                }
+            data.getNode().setOnMouseExited((MouseEvent e) -> {
+                rootPane.getChildren().remove(previewGroup);
             });
         }
 
@@ -310,11 +275,11 @@ public class Gui extends Application {
                         } catch (SQLException ex) {
                             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         Alert alert = new Alert(AlertType.WARNING, "Input must be parseable to a Double", ButtonType.OK);
                         alert.show();
                     }
-                    
+
                 });
             });
             contextMenu.getItems().add(remove);
@@ -331,20 +296,19 @@ public class Gui extends Application {
      * @param grade
      * @throws SQLException
      */
-    public void formInputOptionList(ListView list, int grade) throws SQLException {
+    public void formInputOptionList(ListView list, int grade) {
         ObservableList<Item> newListItems = FXCollections.observableArrayList();
         itemService.getByGrade(grade).forEach(item -> newListItems.add(item));
         list.getItems().setAll(newListItems);
     }
 
-    public void formPreview(Image image, List<String> labels) {
+    public void formPreview(byte[] imageAsByteArray, List<String> labels) {
         Group newPreviewGroup = new Group();
 
         Rectangle backdrop = new Rectangle(220, 240, Color.GRAY);
         newPreviewGroup.getChildren().add(backdrop);
 
-        ImageView previewImageView = new ImageView(image);
-        previewImageView.setFitHeight(180);
+        ImageView previewImageView = new ImageView(new Image(new ByteArrayInputStream(imageAsByteArray)));
         previewImageView.setFitWidth(180);
         previewImageView.setPreserveRatio(true);
         double actWidth = previewImageView.getBoundsInLocal().getWidth();

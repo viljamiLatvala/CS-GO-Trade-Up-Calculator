@@ -21,48 +21,43 @@ public interface ItemDao<Item, Integer> {
     /**
      *
      * @param item
-     * @throws SQLException
      */
-    void create(Item item) throws SQLException;
+    void create(Item item);
 
     /**
      *
      * @return
-     * @throws SQLException
      */
-    List<Item> getAll() throws SQLException;
+    List<Item> getAll();
 
     /**
      *
      * @return
-     * @throws SQLException
+     * @throws java.sql.SQLException
      */
-    List<Item> getPossibleInputs() throws SQLException;
+    List<Item> getPossibleInputs();
 
     /**
      *
      * @param inputItem
      * @return
-     * @throws SQLException
      */
-    List<Item> getChildren(Item inputItem) throws SQLException;
+    List<Item> getChildren(Item inputItem);
 
     /**
      *
      * @param key
      * @return
-     * @throws SQLException
      */
-    Item findById(Integer key) throws SQLException;
+    Item findById(Integer key);
     
-    Item findByName(String name) throws SQLException;
+    Item findByName(String name);
 
     /**
      *
      * @param grade
      * @return
-     * @throws SQLException
      */
-    List<Item> getByGrade(int grade) throws SQLException;
+    List<Item> getByGrade(int grade);
 
 }
