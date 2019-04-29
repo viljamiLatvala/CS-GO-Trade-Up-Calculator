@@ -1,8 +1,6 @@
 # CS:GO TradeUp Calculator
 
-Sovelluksen käyttäjien on mahdollista simuloida Counter-Strike Global Offensice-pelissä tavaroille tehtäviä Trade Up sopimuksia. Sopimuksissa pelaajan on mahdollista vaihtaa 10 omistamaansa esinettä yhteen ylemmän harvinaisuusluokan esineeseen. Saatava uusi esine pohjautuu vaihtokaupaan sijoitettaviin alemman harvinaisuusluokan esineisiin.
-
-Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niiden tiedot niitä listaavalta [CS:GO Stash](https://csgostash.com)-sivustolta. Toistaiseksi luokkaa ei voi käyttää käyttöliittymästä, vaan sovelluksen käyttöön on muodostettu valmis tietokanta luokan avulla. Sovellus tarjoaa graafisen käyttöliittymän, mutta joitain ilmoituksia annetaan toistaiseksi konsoliin.
+Sovelluksella käyttäjien on mahdollista simuloida Counter-Strike Global Offensice-pelissä tavaroille tehtäviä Trade Up sopimuksia. Sopimuksissa pelaajan on mahdollista vaihtaa 10 omistamaansa esinettä yhteen ylemmän harvinaisuusluokan esineeseen. Saatava uusi esine sekä sen kuntoluokitus pohjautuvat vaihtokaupaan sijoitettaviin alemman harvinaisuusluokan esineisiin.
 
 ## Dokumentaatio
 [Vaatimusmäärittely](../master/dokumentaatio/vaatimusmaarittely.md)
@@ -12,6 +10,8 @@ Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niide
 [Esitietoa](../master/dokumentaatio/esitietoa.md)
 
 [Arkkitehtuurikuvaus](../master/dokumentaatio/arkkitehtuuri.md)
+
+[Testausdokumentti](../master/dokumentaatio/testaus.md)
 
 [Tuntikirjanpito](../master/dokumentaatio/tuntikirjanpito.md)
 
@@ -24,33 +24,37 @@ Sovellukselle on toteutettu luokka, joka parsii pelissä olevat esineet ja niide
 
 ### Testaus
 
-Testit suoritetaan komennolla
+Testien suorittaminen:
 
 ```
 mvn test
 ```
 
-Testikattavuusraportti luodaan komennolla
+Testikattavuusraportin generointi:
 
 ```
 mvn jacoco:report
 ```
-Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto _target/site/jacoco/index.html_
+Kattavuusraportti löytyy tiedostosta _target/site/jacoco/index.html_
 
 ### Jar-pakkaukasen luominen
 
-Jar-pakkaus luodaan komennolla
+Jar-pakkauksen generointi:
 
 ```
 mvn jacoco:package
 ```
+### JavaDoc
+JavaDocin generointi:
+```
+mvn javadoc:javadoc
+```
 
 ### Checkstyle
 
-Checkstyle-tarkistukset suoritetaan komennolla
-
+Checkstyle-tarkistus:
 ```
  mvn jxr:jxr checkstyle:checkstyle
 ```
 
-Mahdolliset virheilmoitukset selviävät tiedostosta _target/site/checkstyle.html_
+Checkstyle-raportti löytyy tiedostosta _target/site/checkstyle.html_
