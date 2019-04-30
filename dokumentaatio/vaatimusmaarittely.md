@@ -3,7 +3,7 @@
 ## Sovelluksen tarkoitus
 Sovelluksen avulla käyttäjän on mahdollista simuloida Counter-Strike: Global Offensive pelissä tehtäviä vaihtosopimuksia. Simuloimalla näitä vaihtosopimuksia on käyttäjän mahdollista selvittää erilaisista yhdistelmistä syntyviä lopputulosvaihtoehtoja ja niiden todennäköisyyksiä. Näin käyttäjä voi ennustaa pelissä tapahtuvien sopimusten lopputulemaa ennen kuin tekee lopullisia ratkaisuja itse pelissä.
 
-Koska sovelluksen tarkoitus ja toimintaperiaate, sekä käytettävä termistö voi olla vaikeasti avautuvaa itse peliä tuntemattomalle, on näitä seikkoja pyritty esittelemään [esitietoa.md](../master/dokumentaatio/esitietoa.md) -tiedostossa.
+Koska sovelluksen tarkoitus ja toimintaperiaate, sekä käytettävä termistö voi olla vaikeasti avautuvaa itse peliä tuntemattomalle, on näitä seikkoja pyritty esittelemään [esitietoa.md](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/esitietoa.md) -tiedostossa.
 
 ## Käyttäjät
 Sovelluksessa on vain yksi käyttäjärooli, nk. "normaali käyttäjä".
