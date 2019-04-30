@@ -46,6 +46,6 @@ Kun käyttäjä valitsee käyttöliittymässä olevasta listasta esineen tuotant
 ## Sovellukseen jääneet rakenteelliset heikkoudet
 Käyttöliittymäluokassa asetetaan useita käyttöliittymäelementtejä globaaleihin muuttujiin niitten käytön mahdollistamiseksi luokan eri metodeista. Parempi käytäntö lienisi elementtien antaminen parametrinä käyttöliittymää muokkaaville metodeille. Näin muuttujien näkyvyys ja muistinkäyttä voitaisiin minimoida ja mahdollisesti myös koodin luettavuus paranisi.
 
-SQLItemDao-luokan metodi getPossibleInputs() palauttaa myös sellaiset esineet joilla ei ole lapsiesineitä, eivätkä siis todellisuudessa olisi käytettävissä sopimuksen tekemisesn.
+Kun käyttäjä valitsee ensimmäisen esineen osaksi vaihtosopimusta, rajataan valintalistaa siten että se näyttää vain tuon esineen kanssa samaa laatuluokitusta olevat esineet. Tätä listaa ei sovelluksen nykytilassa ladata uudelleen, vaikka käyttäjä poistaisi listasta kaikki esineet,
 
 Sovelluksen käyttämä tietokanta sisältää hieman toisteista tietoa, sillä sarake name on vain esineen arvojen design ja weapon yhdistelmä.
