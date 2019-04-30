@@ -45,3 +45,5 @@ Kun käyttäjä valitsee käyttöliittymässä olevasta listasta esineen tuotant
 
 ## Sovellukseen jääneet rakenteelliset heikkoudet
 Käyttöliittymäluokassa asetetaan useita käyttöliittymäelementtejä globaaleihin muuttujiin niitten käytön mahdollistamiseksi luokan eri metodeista. Parempi käytäntö lienisi elementtien antaminen parametrinä käyttöliittymää muokkaaville metodeille. Näin muuttujien näkyvyys ja muistinkäyttä voitaisiin minimoida ja mahdollisesti myös koodin luettavuus paranisi.
+
+SQLItemDao-luokan metodi getPossibleInputs() palauttaa myös sellaiset esineet joilla ei ole lapsiesineitä, eivätkä siis todellisuudessa olisi käytettävissä sopimuksen tekemisesn.
