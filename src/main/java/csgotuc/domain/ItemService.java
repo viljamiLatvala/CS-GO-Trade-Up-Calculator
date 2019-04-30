@@ -87,16 +87,14 @@ public class ItemService {
      * Method for calculating possible returns of a Trade Up-contract. 
      * @return list of possible returns on a Trade Up-contract with given input.
      * Number of occurrences of an Item corresponds to the chance that it would be received as output from the Trade Up.
-     * 
-     * @throws SQLException
      */
     public List<Item> calculateTradeUp() {
         double floatSum = 0;
         List<Item> output = new ArrayList<>();
         
-        for (Item item : this.inputMap.values()) {
-            floatSum += item.getFloatValue();
-            for (Item outputItem : (List<Item>) itemDao.getChildren(item)) {    
+        for (Item inputItem : this.inputMap.values()) {
+            floatSum += inputItem.getFloatValue();
+            for (Item outputItem : (List<Item>) itemDao.getChildren(inputItem)) {    
                 output.add(outputItem);
             }
         }
@@ -104,7 +102,9 @@ public class ItemService {
         double floatAvg = floatSum / inputMap.values().size();
  
         output.forEach((outputItem) -> {
-            double finalFloat = (outputItem.getMaxWear() - outputItem.getMinWear()) * floatAvg + outputItem.getMinWear();
+            double maxWear = outputItem.getMaxWear();
+            double minWear = outputItem.getMinWear();
+            double finalFloat = ( maxWear - minWear) * floatAvg + minWear;
             outputItem.setFloatValue(finalFloat);
         });
         return output;

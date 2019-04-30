@@ -13,7 +13,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -114,6 +116,34 @@ public class ItemServiceTest {
     @Test
     public void getPossibleInputsWorks() {
         assertEquals(56, this.itemService.getPossibleInputs().size());
+    }
+    
+    @Test
+    public void wholeProcessTest() {
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+        this.itemService.addToInput(item);
+
+        this.itemService.removeFromInput();
+        this.itemService.addToInput(item);
+        
+        List<Item> outcomePool = this.itemService.calculateTradeUp();
+        
+        Map<Item, Integer> outcomeMap = new HashMap<>();
+        for (Item item : outcomePool) {
+            if(outcomeMap.containsKey(item)){
+                outcomeMap.put(item, outcomeMap.get(item) + 1);
+            } else{
+                outcomeMap.put(item, 1);
+            }
+        }
     }
     
 //    @Test
