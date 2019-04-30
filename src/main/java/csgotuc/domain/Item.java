@@ -42,6 +42,8 @@ public class Item {
         this.floatValue = item.getFloatValue();
         this.grade = item.getGrade();
         this.image = item.getImage();
+        this.minWear = item.minWear;
+        this.maxWear = item.maxWear;
 
     }
 
@@ -100,6 +102,17 @@ public class Item {
         }
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + Objects.hashCode(this.collection);
+        hash = 29 * hash + this.grade;
+        return hash;
+    }
+    
+    
 
     @Override
     public String toString() {

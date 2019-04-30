@@ -11,4 +11,6 @@
 | 26.4. | 4h | Käyttöohjeiden kirjoittelua, testien parantelua, dokumentaation täydentämistä, uuden GitHub releasen tekeminen |
 | 28.4. | 5h | Kuvien lataaminen tietokannasta, perustoiminnallisuus tarkempien tietojen katselemiseksi piirakkadiagrammista |
 | 29.4. | 5h | floatValuen asettaminen keskinäkymästä, floatValuen ja kulutuksen laskeminen, koodin siistiminen, testikattavuuden parantaminen ja testien järkevöittäminen, dokumentaation hiomista |
-|Yhteensä | 46h |
+| 30.4. | 2h | Dokumentaation kirjoittamista, pieniä bugikorjauksia |
+
+|Yhteensä | 48h |

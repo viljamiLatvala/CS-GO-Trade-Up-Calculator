@@ -115,6 +115,6 @@ public class ItemServiceTest {
     
     @Test
     public void getPossibleInputsWorks() {
-        assertEquals(56, this.itemService.getPossibleInputs().size());
+        assertEquals(35, this.itemService.getPossibleInputs().size());
     }
 }

@@ -245,7 +245,11 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                fetchedItems.add(fetchItem(rs));
+                Item fetched = fetchItem(rs);
+                if (getChildren(fetched).size() > 0) {
+                    fetchedItems.add(fetched);
+                }
+                
             }
 
             stmt.close();

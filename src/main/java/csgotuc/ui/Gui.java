@@ -182,6 +182,7 @@ public class Gui extends Application {
         for (int i = 0; i < poolSize; i++) {
             Item curItem = outcomePool.get(i);
             if (outcomeDist.containsKey(curItem)) {
+                System.out.println("CONTAINS");
                 outcomeDist.put(curItem, outcomeDist.get(curItem) + 1);
             } else {
                 outcomeDist.put(curItem, 1);
