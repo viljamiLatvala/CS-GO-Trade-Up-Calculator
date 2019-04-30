@@ -117,44 +117,4 @@ public class ItemServiceTest {
     public void getPossibleInputsWorks() {
         assertEquals(56, this.itemService.getPossibleInputs().size());
     }
-    
-    @Test
-    public void wholeProcessTest() {
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-        this.itemService.addToInput(item);
-
-        this.itemService.removeFromInput();
-        this.itemService.addToInput(item);
-        
-        List<Item> outcomePool = this.itemService.calculateTradeUp();
-        
-        Map<Item, Integer> outcomeMap = new HashMap<>();
-        for (Item item : outcomePool) {
-            if(outcomeMap.containsKey(item)){
-                outcomeMap.put(item, outcomeMap.get(item) + 1);
-            } else{
-                outcomeMap.put(item, 1);
-            }
-        }
-    }
-    
-//    @Test
-//    public void setInputWorks() {
-//        List<Item> items = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            items.add(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null));
-//        }
-//        this.itemService.setInput(items);
-//        for (int i = 0; i < 10; i++) {
-//            assertTrue(new Item("SG 553", "Integrale", "The 2018 Inferno Collection", 4, null).equals(items.get(i)));
-//        }
-//    }
 }

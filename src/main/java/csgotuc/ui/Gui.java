@@ -294,7 +294,6 @@ public class Gui extends Application {
      *
      * @param list
      * @param grade
-     * @throws SQLException
      */
     public void formInputOptionList(ListView list, int grade) {
         ObservableList<Item> newListItems = FXCollections.observableArrayList();
