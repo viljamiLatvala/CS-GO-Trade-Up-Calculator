@@ -4,14 +4,14 @@
 
 ### Sovelluslogiikka
 [ItemService](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/main/java/csgotuc/domain/ItemService.java)-luokkaa testataan [ItemServiceTest](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/ItemServiceTest.java) -luokkaan toteutetuilla testeillä joilla simuloidaan käyttöliittymästä ItemServiceltä kutsuttavia toimintoja. Testit käyttävät testaamiseen tarkoitettua test_database.db -tietokantatiedostoa 
-[Item] https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/Item.java -luokkan equal() ja getCondition()-metodeja sekä parametrina annetusta Item-oliosta syväkopion luovaa konstruktoria on testattu yksikkötesteillä luokassa [ItemTest](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/ItemTest.java).
+[Item](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/Item.java) -luokkan equal() ja getCondition()-metodeja sekä parametrina annetusta Item-oliosta syväkopion luovaa konstruktoria on testattu yksikkötesteillä luokassa [ItemTest](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/ItemTest.java).
 ### SQLItemDao
 Database Access Object-luokkaa [SQLItemDao](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/main/java/csgotuc/dao/SQLItemDao.java) on testattu käyttämällä testaamiseen tarkoitettua test_database.db -tietokantatiedostoa. Muutamia toimintoja, joita ItemServiceTest ei kata, on testattu erikseen [SQLItemDaoTest](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/SQLItemDaoTest.java) -luokassa.
 
 ### Testikattavuus
 Testauksen rivikattavuus on 87% ja haarautumakattavuus 94%.
 
-![Testikattavuus](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/testikattavuus.png )
+![Testikattavuus](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/testikattavuus.PNG )
 
 Testikattavuuteen ei ole laskettu mukaan käyttöliittymäluokkaa.
 
