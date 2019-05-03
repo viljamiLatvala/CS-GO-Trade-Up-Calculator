@@ -9,7 +9,7 @@
 Database Access Object-luokkaa [SQLItemDao](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/main/java/csgotuc/dao/SQLItemDao.java) on testattu käyttämällä testaamiseen tarkoitettua test_database.db -tietokantatiedostoa. Muutamia toimintoja, joita ItemServiceTest ei kata, on testattu erikseen [SQLItemDaoTest](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/src/test/java/SQLItemDaoTest.java) -luokassa.
 
 ### Testikattavuus
-Testauksen rivikattavuus on 87% ja haarautumakattavuus 94%.
+Testauksen rivikattavuus on 85% ja haarautumakattavuus 95%.
 
 ![Testikattavuus](https://github.com/viljamiLatvala/ohjelmistotekniikka/blob/master/dokumentaatio/testikattavuus.PNG )
 

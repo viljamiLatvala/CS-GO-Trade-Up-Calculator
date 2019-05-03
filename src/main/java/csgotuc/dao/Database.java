@@ -8,7 +8,7 @@ package csgotuc.dao;
 import java.sql.*;
 
 /**
- *
+ * Class that contains the database connection to database specified by the constructor parameter.
  * @author Viljami
  */
 public class Database {
@@ -16,7 +16,7 @@ public class Database {
 
     /**
      *
-     * @param databaseAddress
+     * @param databaseAddress   location of the database
      * @throws ClassNotFoundException
      */
     public Database(String databaseAddress) throws ClassNotFoundException {
@@ -25,7 +25,7 @@ public class Database {
 
     /**
      *
-     * @return
+     * @return  the connection to the database.
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException {

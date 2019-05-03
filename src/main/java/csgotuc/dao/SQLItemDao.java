@@ -30,8 +30,8 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     }
 
     /**
-     *
-     * @param item
+     * Creates a new item to the database
+     * @param   item  Item to create
      */
     @Override
     public void create(Item item) {
@@ -56,6 +56,10 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
         }
     }
 
+    /**
+     * Deletes an item from the database
+     * @param   item    Item to delete
+     */
     @Override
     public void delete(Item item) {
         try {
@@ -105,7 +109,13 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
 
         return (Item) fetchedItem;
     }
-
+    
+    /**
+     * Method to get one item with specific name from the database.
+     *
+     * @param name
+     * @return Item with corresponding name or null if one is not found.
+     */
     @Override
     public Item findByName(String name) {
         Item fetchedItem = null;
@@ -176,7 +186,6 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
             int desiredGrade = inputItem.getGrade() + 1;
 
             Connection connection = database.getConnection();
-
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE collection = ? AND grade = ?");
             stmt.setString(1, collection);
             stmt.setInt(2, desiredGrade);
@@ -237,9 +246,7 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
     public List<Item> getPossibleInputs() {
         List<Item> fetchedItems = new ArrayList<>();
         try {
-
             Connection connection = database.getConnection();
-
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Item WHERE grade < ?");
             stmt.setInt(1, 5);
             ResultSet rs = stmt.executeQuery();
@@ -249,13 +256,10 @@ public class SQLItemDao implements ItemDao<Item, Integer> {
                 if (getChildren(fetched).size() > 0) {
                     fetchedItems.add(fetched);
                 }
-                
             }
-
             stmt.close();
             rs.close();
             connection.close();
-
         } catch (SQLException ex) {
             Logger.getLogger(SQLItemDao.class.getName()).log(Level.SEVERE, null, ex);
         }

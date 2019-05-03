@@ -12,5 +12,6 @@
 | 28.4. | 5h | Kuvien lataaminen tietokannasta, perustoiminnallisuus tarkempien tietojen katselemiseksi piirakkadiagrammista |
 | 29.4. | 5h | floatValuen asettaminen keskinäkymästä, floatValuen ja kulutuksen laskeminen, koodin siistiminen, testikattavuuden parantaminen ja testien järkevöittäminen, dokumentaation hiomista |
 | 30.4. | 2h | Dokumentaation kirjoittamista, pieniä bugikorjauksia |
+| 3.5. | 1h | Viimeiset muutokset dokumentaatioon loppupalautusta varten |
 
-|Yhteensä | 48h |
+|Yhteensä | 49h |

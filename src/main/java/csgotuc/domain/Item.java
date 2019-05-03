@@ -23,8 +23,7 @@ public class Item {
 
     /**
      * @param collection
-     * @param grade
-     * @param image
+     * @param grade numeric representation of the item's grade
      */
     public Item(String name, String collection, int grade, byte[] image, double minWear, double maxWear) {
         this.name = name;
@@ -36,6 +35,11 @@ public class Item {
         this.maxWear = maxWear;
     }
 
+    /**
+     * A constructor for creating deep clones of Item-objects
+     *
+     * @param item the item to duplicate
+     */
     public Item(Item item) {
         this.name = item.getName();
         this.collection = item.getCollection();
@@ -111,16 +115,15 @@ public class Item {
         hash = 29 * hash + this.grade;
         return hash;
     }
-    
-    
 
     @Override
     public String toString() {
         return "Item{" + "name=" + name + ", collection=" + collection + ", maxWear=" + maxWear + '}';
     }
-    
-    
 
+    /**
+     * @return the String-form condition bracket that corresponds to the item's float value.
+     */
     public String getCondition() {
         double fv = this.floatValue;
         if (fv < 0.07) {

@@ -25,3 +25,4 @@ Jokaisen lisätyn esineen jälkeen sovellus:
 - Verkosta tietoa hakeva luokka, jolla käyttäjä voi luoda uuden, ajantasaisen tietokannan.
 - Sekä tuotantopanos, että -tulos esineiden arvon tarkastaminen Steam-kauppapaikalta
 - Lasketun vaihtokaupan kannattavuuden laskeminen vaihdantahintojen perusteella
+- Sovelluksen konfiguroitavuuden parantaminen, esim. tietokannan määrittäminen config-tiedostosta.

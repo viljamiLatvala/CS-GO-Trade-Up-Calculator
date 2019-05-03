@@ -1,3 +1,5 @@
+package csgotuc.domain;
+
 
 import csgotuc.domain.Item;
 import static org.junit.Assert.*;

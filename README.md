@@ -42,7 +42,7 @@ Kattavuusraportti löytyy tiedostosta _target/site/jacoco/index.html_
 Jar-pakkauksen generointi:
 
 ```
-mvn jacoco:package
+mvn package
 ```
 ### JavaDoc
 JavaDocin generointi:
