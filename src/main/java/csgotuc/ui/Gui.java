@@ -203,7 +203,7 @@ public class Gui extends Application {
                         item.setFloatValue(key.getFloatValue());
                     }
                 });
-                String dropChance = data.getPieValue() / pieChart.getData().size() * 100 + "%";
+                String dropChance = data.getPieValue() / poolSize * 100 + "%";
                 formPreview(item.getImage(), Arrays.asList(item.getName(), "chance: " + dropChance, "Float Value: " + item.getFloatValue(), "Condition: " + item.getCondition()));
                 previewGroup.setLayoutX(e.getSceneX() + 5);
                 previewGroup.setLayoutY(e.getSceneY() + 5);
