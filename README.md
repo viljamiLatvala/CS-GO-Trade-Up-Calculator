@@ -1,4 +1,4 @@
-# CS:GO TradeUp Calculator
+# CS:GO Trade Up Calculator
 
 Sovelluksella käyttäjien on mahdollista simuloida Counter-Strike Global Offensice-pelissä tavaroille tehtäviä Trade Up sopimuksia. Sopimuksissa pelaajan on mahdollista vaihtaa 10 omistamaansa esinettä yhteen ylemmän harvinaisuusluokan esineeseen. Saatava uusi esine sekä sen kuntoluokitus pohjautuvat vaihtokaupaan sijoitettaviin alemman harvinaisuusluokan esineisiin.
 
