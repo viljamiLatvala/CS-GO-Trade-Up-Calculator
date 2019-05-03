@@ -16,9 +16,11 @@ Sovelluksella käyttäjien on mahdollista simuloida Counter-Strike Global Offens
 [Tuntikirjanpito](../master/dokumentaatio/tuntikirjanpito.md)
 
 ## Releaset
-[Viikko 5](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/viikko5)
+[Loppupalautus](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/loppupalautus)
 
 [Viikko 6](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/Viikko6)
+
+[Viikko 5](https://github.com/viljamiLatvala/ohjelmistotekniikka/releases/tag/viikko5)
 
 ## Komentorivitoiminnot
 
